@@ -1,0 +1,4 @@
+<div class='centered' tal:condition='viewlet/view/editing' tal:content='structure context/@@edit' />
+<div class='centered' tal:condition='viewlet/view/adding' tal:content='structure context/@@add' />
+<div class='centered' tal:condition='viewlet/view/deleting' tal:content='structure context/@@delete' />
+<div class='vscroll text' tal:condition='viewlet/view/viewing' tal:content="structure context/text" />

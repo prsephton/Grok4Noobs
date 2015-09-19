@@ -1,0 +1,32 @@
+/* css to support moving menu items around */
+li.menuItem.movable, li.menuItem.aboveMe, li.menuItem.belowMe {
+    margin:2px 0;
+	border:1px solid gray;
+	border-top-color:darkgray;
+	border-left-color:darkgray;
+	cursor:pointer;
+    padding:1px 0.5em;
+}
+
+li.menuItem.movable:hover {
+	background-color: #BAEACA;
+}
+
+li.menuItem.aboveMe:hover, li.menuItem.belowMe:hover {
+	cursor:move;
+}
+
+li.menuItem.moving {
+	background-color: #CACAEA;
+}
+
+li.menuItem.aboveMe:hover {
+    border-top:2px solid black;
+    margin-top:0px;
+}
+
+li.menuItem.belowMe:hover {
+    border-bottom:2px solid black;
+    margin-bottom:0px;
+}
+

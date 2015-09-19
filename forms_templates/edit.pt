@@ -1,0 +1,72 @@
+<form tal:attributes="id view/formId | nothing; action view/getURL | request/URL" method="post"
+      class="edit-form" enctype="multipart/form-data">
+
+  <tal:loop tal:repeat="field view/hidden">
+	  <input type='hidden' tal:attributes="name field/name; value field/value"/>
+  </tal:loop>
+
+  <fieldset class="form-fieldset">
+
+  <legend i18n:translate=""
+    tal:condition="view/label"
+    tal:content="view/label">Label</legend>
+
+  <div class="form-status"
+    tal:define="status view/status"
+    tal:condition="status">
+
+    <div i18n:translate="" tal:content="view/status">
+      Form status summary
+    </div>
+
+    <ul class="errors" tal:condition="view/errors">
+      <li tal:repeat="error view/error_views">
+         <span tal:replace="structure error">Error Type</span>
+      </li>
+    </ul>
+  </div>
+
+
+  <div class="form-fields">
+  	<table>
+      <tal:block repeat="widget view/widgets">
+        <tr class="form-widget">
+          <td class="label" tal:define="hint widget/hint">
+            <label tal:condition="python:hint"
+                   tal:attributes="for widget/name; title hint">
+              <span class="required" tal:condition="widget/required"
+              >*</span><span i18n:translate=""
+                             tal:content="widget/label">label</span>
+            </label>
+            <label tal:condition="python:not hint"
+                   tal:attributes="for widget/name">
+              <span class="required" tal:condition="widget/required"
+              >*</span><span i18n:translate=""
+                             tal:content="widget/label">label</span>
+            </label>
+          </td>
+          <td class="field">
+            <div class="widget" tal:content="structure widget">
+              <input type="text" />
+            </div>
+            <div class="error" tal:condition="widget/error">
+              <span tal:replace="structure widget/error">error</span>
+            </div>
+            <div class="widgetDisplay" tal:condition="widget/display | nothing"
+            	tal:content="structure widget/display">
+            </div>
+          </td>
+        </tr>
+      </tal:block>
+  	</table>
+  </div>
+  <input type='hidden' id='camefrom' name='camefrom' tal:condition='view/referrer | nothing'
+  		tal:attributes='value view/referrer' />
+  <div id="actionsView">
+    <span class="actionButtons" tal:condition="view/availableActions">
+      <input tal:repeat="action view/actions"
+             tal:replace="structure action/render" />
+    </span>
+  </div>
+  </fieldset>
+</form>

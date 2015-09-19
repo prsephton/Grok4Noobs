@@ -1,0 +1,3 @@
+<div class='buttons'>
+	<a tal:attributes="href python:viewlet.view.url(context,data={'delete':1})">Delete this page</a>
+</div>

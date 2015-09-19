@@ -1,0 +1,31 @@
+h1,h2,h3,h4,h5,h6 {
+	text-shadow: 0px 1px 2px #ABA99E;
+}
+
+h1 { font-size:20pt; color: #000040; margin: 0.75em}
+h2 { font-size:18pt; color: #000038; margin: 0.75em; }
+h3 { font-size:16pt; color: #000036; margin: 0.75em;}
+h4 { font-size:14pt; color: #000034; margin: 0.75em;}
+h5 { font-size:13pt; color: #000032; margin: 0.75em; font-weight:bold; }
+h6 { font-size:12pt; color: #000030; margin: 0.75em; text-decoration:underline; }
+
+body {
+	background-color:#FAFAFF;
+	font-size:11pt;
+    font-family:verdana,helvetica,arial,sans-serif;
+}
+
+code {
+    color:navy;
+}
+
+iframe.attachment {
+    width:100%;
+    margin:0;
+    seamless:true;
+    border:0;
+}
+
+iframe.attachment:selected {
+    border:1px inset blue;
+}

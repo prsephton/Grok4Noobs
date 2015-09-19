@@ -1,0 +1,8 @@
+<div>
+    <ul class="menu">
+        <li class="menuItem movable" tal:repeat="item viewlet/items">
+            <span class='navTitle' tal:content="item/navTitle" />
+            - <span tal:content="item/title" />
+        </li>
+    </ul>
+</div>

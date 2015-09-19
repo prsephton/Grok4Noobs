@@ -1,0 +1,25 @@
+<!doctype html>
+<html itemscope="itemscope" itemtype="http://schema.org/WebPage" xmlns="http://www.w3.org/1999/xhtml"
+	xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n" lang="en">
+	<head>
+		<meta content="IE=9" http-equiv="X-UA-Compatible" />
+		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+		<meta name="viewport" content="width=device-width user-scalable=no" />
+		<title tal:content="context/title | context/description | string:Untitled" />
+	</head>
+	<body i18n:domain="camibox">
+		<div class='MastHead rounded-top' tal:content='structure provider:masthead' />
+		<div class='ContentWrapper'>
+		    <div class='ContentArea'>
+                <div class='Navigation' tal:content='structure provider:navigation' />
+                <div class='SideBar' tal:content='structure provider:sidebar' />
+                <div class='ContentBox'>
+                    <div class='Content' tal:content='structure provider:content' />
+                </div>
+    		</div>
+		</div>
+        <div class='Footer' tal:content='structure provider:footer' />
+	</body>
+</html>

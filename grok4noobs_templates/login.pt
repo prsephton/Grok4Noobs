@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Login</title>
+  </head>
+  <body>
+    <h1>Custom Login Page</h1>
+    <form method="post">
+      <div>
+        <label for="login">Username</label>
+        <input type="text" name="login" id="login" />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" />
+      </div>
+      <div>
+        <input type="hidden" name="camefrom"
+               tal:attributes="value view/camefrom" />
+        <input type="submit" name="SUBMIT" value="Log in" />
+      </div>
+    </form>
+  </body>
+</html>

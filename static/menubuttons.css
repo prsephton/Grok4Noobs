@@ -1,0 +1,106 @@
+
+/* Styling menu items as buttons */
+ul.menu >li {
+	display:block;
+	width:auto;
+	list-style: none;
+	line-height: 1.2em;
+    background-color: #c0c0d0;
+    margin:auto;
+}
+
+ul.menu >li.nav {
+    background:transparent;
+    background-color: lightgray;
+}
+
+div.buttons {
+	padding:3px;
+	margin:3px auto;
+	text-shadow: 0px 1px 1px #ABA99E;
+}
+
+ul.menu {
+	border:1px solid gray;
+	border-top-color:darkgray;
+	border-left-color:darkgray;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+
+	display:block;
+	width: auto;
+	color: black;
+	margin:-2px;
+	padding:2px;
+	margin:10px 5px;
+
+    padding:3px;
+	text-align:center;
+    overflow:hidden;
+	text-shadow: 0px 1px 1px #ABA99E;
+}
+
+ul.menu  > li > a {
+    display:block;
+    padding:3px;
+    text-decoration:none;
+    color:navy;
+}
+
+ul.menu  > li > a:hover {
+    font-weight:bold;
+}
+
+div.buttons > a, ul.menu > li.buttons > a {
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+
+	border:1px solid gray;
+	border-top-color:darkgray;
+	border-left-color:darkgray;
+	background-color: #EAFAEA;
+	cursor:pointer;
+
+	margin: auto;
+    padding:1px 0.5em;
+    height:1.4em;
+    line-height:1.2em;
+    overflow:hidden;
+
+    font-weight:normal;
+    text-decoration:none;
+
+    color:navy;
+}
+
+div.buttons > a, ul.menu > li.buttons > a {
+	background-color: #daeada;
+	filter: progid:DXImageTransform.Microsoft.gradient(endColorstr='#CADACA', startColorstr='#EAFFEA'); /* for IE 6, 7*/
+	ms-filter: "progid:DXImageTransform.Microsoft.gradient(endColorstr='#CADACA', startColorstr='#EAFFEA'')"; /* for IE 8,9*/
+    background-image: -moz-linear-gradient(bottom, #CADACA, #EAFFEA);
+    background-image: -webkit-linear-gradient(bottom, #CADACA, #EAFFEA);
+    background-image: -ms-linear-gradient(bottom, #CADACA, #EAFFEA);
+    background-image: -o-linear-gradient(bottom, #CADACA, #EAFFEA);
+    background-image: linear-gradient(bottom, #CADACA, #EAFFEA);
+}
+
+div.buttons > a:hover, ul.menu > li.buttons > a:hover {
+	background-color: #CAFACA;
+	cursor:pointer;
+	filter: progid:DXImageTransform.Microsoft.gradient(endColorstr='#AAEAAA', startColorstr='#CAFACA'); /* for IE 6, 7 */
+	ms-filter: "progid:DXImageTransform.Microsoft.gradient(endColorstr='#AAEAAA', startColorstr='#CAFACA')"; /* for IE 8, 9 */
+    background-image: -moz-linear-gradient(bottom, #AAEAAA, #CAFACA);
+    background-image: -webkit-linear-gradient(bottom, #AAEAAA, #CAFACA);
+    background-image: -ms-linear-gradient(bottom, #AAEAAA, #CAFACA);
+    background-image: -o-linear-gradient(bottom, #AAEAAA, #CAFACA);
+    background-image: linear-gradient(bottom, #AAEAAA, #CAFACA);
+}
+

@@ -1,0 +1,3 @@
+<li class="indent" tal:repeat='item viewlet/sortedItems'>
+	<a tal:attributes="href python:viewlet.view.url(item)" tal:content="item/navTitle" />
+</li>

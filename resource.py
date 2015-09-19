@@ -1,0 +1,17 @@
+from fanstatic import Library, Resource
+
+library    = Library('mygrok.grok4noobs', 'static')
+favicon    = Resource(library, 'favicon.ico')
+style      = Resource(library, 'style.css')
+jquery     = Resource(library, 'lib/jquery-1.11.1.min.js')
+jqueryform = Resource(library, 'lib/jquery.form.min.js', depends=[jquery])
+jqueryuicss= Resource(library, 'lib/jquery-ui-1.11.1/jquery-ui.min.css')
+jqueryui   = Resource(library, 'lib/jquery-ui-1.11.1/jquery-ui.min.js', depends=[jquery, jqueryuicss])
+tinymcelib = Resource(library, 'lib/tinymce/js/tinymce/tinymce.min.js', depends=[jqueryform, jqueryui])
+textStyle  = Resource(library, 'monokai.css')
+ordermenu  = Resource(library, 'ordermenu.js', depends=[jquery])
+textdivs   = Resource(library, 'textdivs.js', depends=[jquery, textStyle])
+popups     = Resource(library, 'popups.js', depends=[jqueryui])
+tinymcegfn = Resource(library, 'tinymce.gfn.plugin.js', depends=[tinymcelib, jquery])
+tinymce    = Resource(library, 'lib/tinymce/init.js', depends=[tinymcelib, tinymcegfn])
+tabular    = Resource(library, 'tabularform.css')

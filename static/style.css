@@ -1,0 +1,74 @@
+@import url('headers.css');
+@import url('general.css');
+@import url('menubuttons.css');
+@import url('ordermenu.css');
+
+table.attachmentsTable {
+  width: 80%;
+  text-align: left;
+  border-collapse: collapse;
+  caption-side: top;
+  margin: 3em;
+}
+
+table.attachmentsTable caption,
+table.attachmentsTable td,
+table.attachmentsTable th {
+  padding: 0.3em;
+  border-bottom: 1px solid #000;
+}
+
+table.attachmentsTable td {
+  border-right: 1px solid #000;
+}
+
+table.attachmentsTable th:last-child,
+table.attachmentsTable td:last-child {
+  border-right: 0;
+}
+
+table.attachmentsTable tfoot th,
+table.attachmentsTable tfoot td {
+  border-bottom: 0;
+  text-align: center;
+}
+
+table.attachmentsTable td.buttons {
+  width: 8em;
+  text-align:center;
+}
+
+.indent {
+	margin-left: 2em;
+}
+
+.doubleIndent {
+	margin-left: 4em;
+}
+
+.rounded-corners {
+	padding: 10px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    border-radius: 20px;
+}
+
+.rounded-top {
+	padding: 10px 10px 0 10px;
+    -webkit-border-top-left-radius: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -khtml-border-top-left-radius: 20px;
+    -khtml-border-top-right-radius: 20px;
+    -moz-border-top-left-radius: 20px;
+    -moz-border-top-right-radius: 20px;
+    -ms-border-top-left-radius: 20px;
+    -ms-border-top-right-radius: 20px;
+    -o-border-top-left-radius: 20px;
+    -o-border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+

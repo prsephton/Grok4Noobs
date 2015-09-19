@@ -1,0 +1,4 @@
+<div tal:attributes='class string:attachment mceNonEditable;
+                     src string:attachments/${context/name};
+                     name context/name'
+     tal:content="structure view/html" />

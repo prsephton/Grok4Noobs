@@ -1,0 +1,29 @@
+/*
+ * Re-styles an ordinary Grok table based form to display alternate rows in different
+ * colours, and table fields next to each other.  Useful for forms with arrays of sub-forms.
+ */
+
+form { width:100% }
+form > table {
+    width: 100%;
+    -webkit-border-top-left-radius: 20px;
+    -khtml-border-top-left-radius: 20px;
+    -moz-border-top-left-radius: 20px;
+    -ms-border-top-left-radius: 20px;
+    -o-border-top-left-radius: 20px;
+    border-top-left-radius: 20px;
+}
+
+form > table fieldset {color:blue; border:none}
+form > table fieldset > legend {display:none}
+
+form > table.form-fields {border:1px solid blue}
+form > table.form-fields td.fieldname{display:none}
+form > table.form-fields tr:first-child td.label span{display:none}
+form > table.form-fields li:nth-child(even) {background:#cecefe}
+form > table.form-fields tr:nth-child(even) {background:#cecefe}
+form > table.form-fields div.row {float:left}
+form > table.form-fields div.row input {border:none; border-bottom:1px dashed black; background:lightgreen}
+form > table.form-fields div.row div {float:left}
+form > table.form-fields div.row label {margin-left:5px; margin-right:2px}
+form > table.listing input {background:none}

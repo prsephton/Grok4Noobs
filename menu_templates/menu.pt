@@ -1,0 +1,14 @@
+<div class='MenuHeader' tal:condition="context/navTitle | nothing">
+	<h5 tal:content="context/navTitle" />
+</div>
+
+<div class='buttons' tal:condition="context/navTitle | nothing">
+	<a tal:attributes="href python:viewlet.view.url(context,data={'edit':1})">Edit</a>
+	<a tal:attributes="href python:viewlet.view.url(context,data={'add':1})">Add</a>
+	<a tal:attributes="href python:viewlet.view.url(context)">Cancel</a>
+</div>
+
+<ul class='menu'>
+	<div tal:replace='structure provider:menuitems' />
+</ul>
+

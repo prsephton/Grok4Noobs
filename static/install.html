@@ -1,0 +1,31 @@
+<h3>Compulsory Section about Installing Grok</h3>
+<p>Rather excellent details on how to go about installing Grok may be found on the&nbsp;<a title="Getting Started with Grok" href="http://grok.zope.org/about/download">getting started page</a> on the main Grok web site.</p>
+<p>It all comes down to:</p>
+<pre>$ easy_install grokproject<br>$ grokproject mygrok</pre>
+<p>This will build a directory structure containing a working web server framework and a sample application in <code>mygrok/src/mygrok/app.py</code>.</p>
+<p>Assuming you used <strong>mygrok</strong> as the name of your grok project, some of the details are not necessarily intuitive to a first time user.&nbsp; The following comments and hints should prevent quite a bit of frustration for newcomers;</p>
+<ul>
+<li>setup.py contains the configuration for your Grok installation, including any package dependencies</li>
+<li>buildout.cfg contains additional information about versions of packages and buildout recipes which should be installed</li>
+<li>running bin/buildout is necessary after changing either of the above files</li>
+<li><code>bin/paster serve --reload parts/etc/deploy.ini</code> will start up a server on port 8080 in production mode</li>
+<li><code>bin/paster serve --reload parts/etc/debug.ini</code> will start up a server on port 8080 in development mode</li>
+<li>connecting to localhost on port 8080 brings up a management interface, where you can add applications to your server</li>
+<li>Grok finds applications by scanning the directory structure for Python classes which inherit from grok.Application.</li>
+<li>It is best to create your own applications in their own Python package directories; IOW, directories containing __init__.py</li>
+<li>View templates (or page templates) are located in a directory called &lt;modulename&gt;_templates in the same directory as your module.&nbsp; For example, with app.py, the templates are located in app_templates.</li>
+<li>It is best to include "<code>zope.app.schema</code>" in your setup.py immediately when starting out.&nbsp; There is an outstanding problem whereby global utilities (grok.GlobalUtility) don't register themselves unless this is done.</li>
+<li>Your setup.py includes a section for fanstatic:<br>
+<div class="highlight">
+<pre><span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+          <span class="s">'fanstatic.libraries'</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s">'mygrok = mygrok.resource:library'</span><span class="p">,<br>              ...</span>
+           <span class="p">]</span>
+<span class="p">}</span>
+</pre>
+</div>
+which should be modified for each package directory from where you want to include static resources. There is more&nbsp;<a title="Fanstatic integration" href="http://grok.zope.org/doc/community/view_generation/fanstatic_resources.html">documentation on the Grok site</a> about how to use fanstatic, but its a little hard to find.&nbsp; Also look at the <a title="GrokProject at pypi" href="https://pypi.python.org/pypi/grokproject">grokproject documentation</a>, and at <a title="Fanstatic" href="http://www.fanstatic.org/en/0.14/integration.html">fanstatics home page</a>.</li>
+<li>buildout.cfg has a <code>include-site-packages = false</code> setting which may be set true if you want your local Grok instance to access site-wide packages.</li>
+<li>The easiest way to set up your IDE is to set the interpreter to <code>~/mygrok/bin/python_console</code>. This ensures that all of the buildout eggs are available to your IDE so that syntax highlighting and introspection works properly.</li>
+</ul>
+<p>&nbsp;</p>

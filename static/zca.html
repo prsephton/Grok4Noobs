@@ -1,0 +1,84 @@
+<h3>What is the ZCA?</h3>
+<p>The Zope Component Architecture is a registry for components.&nbsp; These components are defined in terms of their associated Interfaces.&nbsp; The reason why this is useful, is that the registry provides an easy and fast lookup to find implementors for various interfaces, and a way to specify relationships between components of the system being developed.</p>
+<h4>Where is the ZCA used?</h4>
+<p>&nbsp;The ZCA is used wherever a pluggable interface is needed.&nbsp; For example, views on data models: to define a view, it is first registered with the ZCA. When a request comes in, the request maps to a data model, and the associated view is looked up in the site registry.&nbsp; Similarly, event handlers may be registered with the ZCA and the appropriate event handler located using the site registry.</p>
+<p>This concept has proven to be so useful, that it is hard to find a library in the Zope Toolkit which does not use the ZCA.</p>
+<h4>What is the advantage of this approach?</h4>
+<p>In a nutshell, simplicity, scalability and flexibility.&nbsp; By using a common and uniform way to glue bits and pieces of the framework together, the way these things fit together is formalised.&nbsp; Because any component may be easily replaced by another simply by registering the new component with the ZCA, the entire framework becomes pluggable and extensible.</p>
+<p>A further distinct advantage is separation of concerns.&nbsp; By building your component to meet the specification of a pubilc interface, none of the implementation detail beyond the interface itself needs to be exposed. On a practical level, this means that your source code is better organised and more managable.</p>
+<h4>Are there any caveats to using the ZCA?</h4>
+<p>Sure there are. No architecture is without faults.&nbsp; One problem is that one can easily get carried away.&nbsp; Not every function needs to be a pluggable utility or registered with the site registry.&nbsp; It is quite easy to end up adding rather than reducing complexity.</p>
+<p>There is also quite a steep learning curve and conceptual hill to climb before one can become really productive.&nbsp; One first needs to understand the types of components supported by the ZCA and where they are used.</p>
+<h4>What types of components are defined by the ZCA?</h4>
+<p>There are two basic types of components: Utilities, and Adapters.&nbsp; Other component types are specialisations of these.</p>
+<h5>Utilities</h5>
+<p>Utilities are simple plug points identified by an interface.&nbsp; For example, the ZTK defines <code>IVocabularyFactory</code> as a kind of utility.&nbsp; When you define an instance of this interface, you give it a name- for example "fruit".&nbsp; The implementation of the factory returns a list of terms, each being a tuple consisting of a value, a token and a title.&nbsp; For example, <code>('orange', str(0), u'An Orange')</code>.&nbsp; Later, when the framework needs a list of "fruit" options, perhaps whilst rendering options for a select tag, it can look for an&nbsp;<code>IVocabularyFactory</code> utility with a name of "fruit".</p>
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">Fruit</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">GlobalUtility</span><span class="p">)</span>
+  <span class="n">grok</span><span class="o">.</span><span class="n">implements</span><span class="p">(</span><span class="n">IVocabularyFactory</span><span class="p">)</span>
+  <span class="n">grok</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s">'fruit'</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="n">typesOfFruit</span> <span class="o">=</span> <span class="p">[(</span><span class="s">'orange'</span><span class="p">,</span> <span class="s">u'An Orange'</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s">'pear'</span><span class="p">,</span> <span class="s">u"A Pear"</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s">'banana'</span><span class="p">,</span> <span class="s">u"A Banana"</span><span class="p">)]</span>
+    <span class="n">terms</span> <span class="o">=</span> <span class="p">[</span><span class="n">SimpleVocabulary</span><span class="o">.</span><span class="n">createTerm</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">token</span><span class="p">),</span> <span class="n">title</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">typesOfFruit</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">SimpleVocabulary</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span>
+</pre>
+</div>
+<p>Of course we can have all sorts of vocabularies defined and registered, but since they all implement the same interface, we can treat them in precisely the same way.</p>
+<h5>Adapters</h5>
+<p>Adapters are things which make one interface look like another.&nbsp; Another way of saying it, is that an <em>Adapter</em> is a Python callable which takes one thing as an argument, and returns another kind of thing.</p>
+<p>A <em>MultiAdapter</em> is a Python callable which... wait for it ... takes <em>more</em> than one kind of thing and turns it into another kind of thing.</p>
+<p>The concept is so simple as to be almost stupid. This may be the reason programmers think the ZCA is complicated: they keep saying to themselves "it can't be that simple!" and overthinking it.</p>
+<p>The difference though, is that the ZCA provides a way to registering such callable objects, by name if necessary, and of finding them later according to argument type and/or name.&nbsp; <em>That</em> is where the power and utility of the ZCA comes from.</p>
+<p>The ZCA documentation goes on about UK wall sockets and USA wall sockets and a physical adapter that makes a UK socket look like a USA one.&nbsp; Good enough as analogies go.</p>
+<p>In the case of the ZCA, ZTK and Grok, a real world example may be better than an analogy.</p>
+<p>A Zope <em>schema</em> is a kind of Interface which defines fields as attributes.&nbsp; These fields have a type such as Int, Text, Boolean etc.&nbsp; Schemas may be used to automatically generate add, edit or view forms for classes which implement the schema.&nbsp; So for example,</p>
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">ImySchema</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="n">TextLine</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">u'Name:'</span><span class="p">)</span>
+  <span class="n">surname</span> <span class="o">-</span> <span class="n">TextLine</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">u'Surname:'</span><span class="p">)</span>
+  <span class="o">...</span>
+</pre>
+</div>
+<p>We can then define a model which implements the schema:</p>
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+  <span class="n">grok</span><span class="o">.</span><span class="n">implements</span><span class="p">(</span><span class="n">ImySchema</span><span class="p">)</span>
+  <span class="o">...</span>
+</pre>
+</div>
+<p>A default view for this model could be a form:</p>
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">Index</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">DisplayForm</span><span class="p">):</span>
+  <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">MyModel</span><span class="p">)</span>
+</pre>
+</div>
+<p>Now when we navigate to an instance of <code>MyModel</code>, we will see an automatically generated view of the fields in the schema.&nbsp;</p>
+<p>But say, for the sake of argument, <code>MyModel</code> did not in fact implement <code>ImySchema</code>, and that <code>MyModel</code> was a <em>producer</em> of instances of <code>ImySchema</code> instead.&nbsp; Then we could use an adapter to make <code>MyModel</code> actually look like an <code>ImySchema</code>:</p>
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">MyModelSchema</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">Adapter</span><span class="p">):</span>
+  <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">MyModel</span><span class="p">)</span>
+  <span class="n">grok</span><span class="o">.</span><span class="n">implements</span><span class="p">(</span><span class="n">ImySchema</span><span class="p">)</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s">u''</span>
+  <span class="n">surname</span> <span class="o">=</span> <span class="s">u''</span>
+
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">MyModelSchema</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">ob</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">getObj</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">surname</span> <span class="o">=</span> <span class="n">ob</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ob</span><span class="o">.</span><span class="n">surname</span>
+</pre>
+</div>
+<p>Then if we define <code>Index()</code> as follows:</p>
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">Index</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">DisplayForm</span><span class="p">):</span>
+  <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">MyModel</span><span class="p">)</span>
+  <span class="n">form_fields</span> <span class="o">=</span> <span class="n">grok</span><span class="o">.</span><span class="n">Fields</span><span class="p">(</span><span class="n">ImySchema</span><span class="p">)</span>
+</pre>
+</div>
+<p>the framework will recognise that the fields defined don't match the context, and will search for a suitable adapter which can make a <code>MyModel</code> instance look like an <code>ImySchema</code>.&nbsp; It finds such an adapter which initialises the appropriate fields.</p>
+<h4>What is this <span style="text-decoration: underline;">context</span> thing?</h4>
+<p>The attribute variable called <code>self.context</code> in Adapters (see later more about adapters) refers to the object instance being adapted.&nbsp; Generally, <code>self</code> implements an instance of what it is being adapted to, although self may be a factory instead.</p>
+<p>Since <code>grok.View</code> is an adapter, and forms are specialisations of <code>grok.View</code>, these classes have a <code>self.context</code>.&nbsp; The <code>grok.context(cls)</code> directive configures a <code>grok.view</code> to adapt objects of the type <code>cls</code>.</p>

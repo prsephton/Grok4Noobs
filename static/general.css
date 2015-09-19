@@ -1,0 +1,136 @@
+
+body {
+	overflow:hidden;
+	margin:5px;
+}
+
+div.MastHead {
+	background-color:#DADAEA;
+	overflow:hidden;
+	height:8.5em;
+}
+
+div.ContentWrapper {
+    position:absolute;
+    display:block;
+	top:8.5em;
+	left:5px;
+	right:5px;
+	bottom:1em;
+	overflow:hidden;
+}
+
+div.ContentArea {
+    position:relative;
+    display:block;
+	height:100%;
+	overflow:hidden;
+}
+
+div.Navigation {
+    position:relative;
+    display:block;
+	background-color:#DADAEA;
+	overflow:hidden;
+	width:12em;
+	height:100%;
+	float:left;
+/*	border:1px solid black; */
+}
+
+div.ContentBox {
+    display:block;
+	height:100%;
+	background-color:#F7F7FF;
+	overflow:hidden;
+    -webkit-border-top-left-radius: 20px;
+    -khtml-border-top-left-radius: 20px;
+    -moz-border-top-left-radius: 20px;
+    -ms-border-top-left-radius: 20px;
+    -o-border-top-left-radius: 20px;
+    border-top-left-radius: 20px;
+}
+
+div.SideBar {
+    display:block;
+	background-color:#DADAEA;
+	width:12em;
+	height:100%;
+	float:right;
+}
+
+div.Footer {
+    position:absolute;
+	background-color:#DADAEA;
+	height:1.2em;
+	top:auto;
+	bottom:0px;
+	left:5px;right:5px;
+}
+
+div.Content {
+	height:100%;
+    overflow:hidden;
+	overflow-y: auto;
+}
+
+div.MenuHeader {
+	background-color:#CACADA;
+	overflow:hidden;
+	text-align:center;
+	margin:auto;
+}
+
+div.Content > div {
+    position:relative;
+    margin:10px;
+}
+
+form.edit-form {
+    height:100%;
+}
+
+div.vscroll {
+    display: block;
+    overflow:hidden;
+    overflow-y:auto;
+    margin-left:0.8em;
+    margin-right:1em;
+    line-height:1.5em;
+}
+
+div.vscroll > p {
+    text-indent:1.5em;
+}
+
+div.form-fields > table {
+    width:100%;
+}
+
+textarea.pre {
+    font-family: monospace;
+    white-space: pre;
+    overflow: auto;
+    font-size:10pt;
+    min-width:60em;
+}
+
+pre {
+    display: block;
+    width:90%;
+    font-family: monospace;
+    white-space: pre;
+    margin: 0 5%;
+    padding: 1em;
+    height: auto;
+    max-height:20em;
+    overflow: auto;
+	background-color:#D0D0E0;
+    line-height:1.1em;
+    font-size:10pt;
+}
+
+div.highlight > pre {
+	background-color:#10102A;
+    color: white;
+}

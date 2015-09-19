@@ -1,0 +1,8 @@
+<div>
+    <div style="float:right" tal:content="structure provider:authsection" />
+    <div style="float:left">
+        <h1>Grok 4 Noobs</h1>
+        <h4 class='indent' tal:content='context/title' />
+    </div>
+    <div style="float:none; clear: both" />
+</div>
