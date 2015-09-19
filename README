@@ -1,8 +1,5 @@
-This project is intended to be really simple.  It uses the idea of a book library to
-demonstrate some core concepts behind the grok web framework.
-
-The code for this project accompanies a document called "grok-maintenance.pdf", which
-is intended to provide enough information to people who need to maintain a grok project.
+This project is a wiki which documents itself.  The idea is to have
+a working grok project which explains how it is implemented.
 
 Installation:
 
