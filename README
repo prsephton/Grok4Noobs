@@ -1,0 +1,30 @@
+This project is intended to be really simple.  It uses the idea of a book library to
+demonstrate some core concepts behind the grok web framework.
+
+The code for this project accompanies a document called "grok-maintenance.pdf", which
+is intended to provide enough information to people who need to maintain a grok project.
+
+Installation:
+
+    pip install grokproject
+    grokproject mygrok
+    extract this project into mygrok/src/mygrok/
+        cd mygrok/src/mygrok/
+        git clone https://github.com/prsephton/Grok4Noobs.git
+    edit mygrok/setup.py and change the entry_points section to contain
+          'fanstatic.libraries': [
+              'mygrok            = mygrok.resource:library',
+              'mygrok.grok4noobs    = mygrok.grok4noobs.resource:library',
+          ]
+    cd ~/mygrok
+    bin/buildout
+    bin/paster serve --reload parts/etc/deploy.ini  # Starts the server
+
+    Point your browser at localhost:8080 and log in.
+    Create an instance of grok4noobs, and click on it's link.
+
+    To load the database:
+        cp ~/mygrok/src/mygrok/grok4noobs/db/* ~/mygrok
+        from your browser, visit <your url>/restore
+        You should get a message that the wiki data has been loaded
+
