@@ -4,7 +4,7 @@
     demonstrate how to use Grok.
 '''
 import grok
-from interfaces import IArticle, IArticleSorter
+from interfaces import IArticle, IArticleSorter, ISiteRoot
 from users import IUsers
 from layout import ILayout, Navigation, Content
 from menu import MenuItem
@@ -20,11 +20,6 @@ class ArticleContainer(grok.Container):
 
     grok.traversable('attachments')
     grok.traversable('sorter')
-    grok.traversable('users')
-
-    def users(self):
-        if getattr(self, 'principals', False):
-            return IUsers(self.principals)
 
     def sorter(self):
         '''  Find an adapter which adapts self to an IArticleSorter, and return an instance
@@ -43,10 +38,21 @@ class Grok4Noobs(grok.Application, ArticleContainer):
     ''' The Grok4Noobs application is a content wiki-like application which contains examples
         explaining how to use the Grok framework for trivial and non-trivial applications.
     '''
-    grok.implements(IArticle, ILayout)
+    grok.implements(IArticle, ILayout, ISiteRoot)
     title = u'A gentle introduction to using the Grok web framework'
     navTitle = u'Introduction'
     text = u''
+
+    grok.traversable('attachments')
+    grok.traversable('sorter')
+    grok.traversable('users')
+    def users(self):
+        sm = self.getSiteManager()
+        if 'default' in sm:
+            folder = sm['default']
+            if 'users' in folder:
+                return IUsers(folder['users'])
+
 
 class TextViewlet(grok.Viewlet):
     ''' Render the article content
