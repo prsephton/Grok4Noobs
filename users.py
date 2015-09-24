@@ -1,23 +1,63 @@
 import grok
 from zope.component import Interface, getMultiAdapter
 from layout import ILayout, Content
-from zope.schema import List, Object, TextLine, Password, Choice
+from zope.schema import List, Object, TextLine, Password, Choice, Set
 from zope.pluggableauth.plugins.principalfolder import IInternalPrincipal, IInternalPrincipalContainer
 from zope.pluggableauth.plugins.principalfolder import InternalPrincipal
+from zope.securitypolicy.interfaces import IPrincipalRoleManager
+from interfaces import ISiteRoot
+
 from menu import MenuItem
 import permissions as gfn
 import resource as rc
 
 BATCH_SIZE = 10
 
+#_____________________________________________________________
+from zope.formlib.itemswidgets import MultiCheckBoxWidget
+from zope.formlib.interfaces import IInputWidget
+from zope.publisher.browser import IBrowserRequest
+from zope.schema.vocabulary import SimpleVocabulary
+
+class HSet(Set):
+    ''' Marker class for a horizontal set
+    '''
+
+class MyMultiCheckboxWidget(MultiCheckBoxWidget):
+    '''  Add a cssClass to a MultiCheckboxWidget widget that we can use to format items
+    '''
+
+    def _renderItem(self, index, text, value, name, cssClass, checked=False):
+        return super(MyMultiCheckboxWidget, self)._renderItem(index, text, value,
+                                                              name, 'checkboxSetItem',
+                                                              checked)
+
+class HSetVocabularyWidget(grok.MultiAdapter):
+    '''  Left to it's own devices, this a set displays a dropdown selection box with
+           multi-select capability (control-LMB to choose multiple values.)  Rather than this,
+           we would like the widget for Set fields to be multiple check boxes, one for each
+           value in the set.  This MultiAdapter overrides the original widget with the new one.
+    '''
+    grok.adapts(HSet, SimpleVocabulary, IBrowserRequest)
+    grok.provides(IInputWidget)
+
+    def __new__(cls, context, vocab, request):
+            w=MyMultiCheckboxWidget(context,vocab,request)
+            w.orientation = 'horizontal'
+            return w
+
+
 #____________________________________________________________________________________
 class IAccount(Interface):
-    login       = TextLine(title=u'Login', description=u'A login/user Name')
-    title       = TextLine(title=u"Title", description=u"Provides a title for the principal.", required=False)
-    password    = Password(title=u"Password", description=u"The password for the principal.", required=False)
-    role        = Choice(title=u'Role', vocabulary=u'gfn.AccountRoles',
-                         description=u'The kind role the user plays',
-                         default='gfn.Visitor')
+    login       = TextLine(title=u'Login: ', description=u'A login/user Name')
+    title       = TextLine(title=u"Title: ", description=u"Provides a title for the principal.", required=False)
+    password    = Password(title=u"Password: ", description=u"The password for the principal.", required=False)
+#    description = TextLine(title=u"Describe", description=u"Describes the principal.", required=False)
+    roles       = HSet(title=u'Roles: ',
+                        value_type=Choice(title=u'Role', vocabulary=u'gfn.AccountRoles',
+                            description=u'The kind role the user plays',
+                            default='gfn.Visitor'), default=set())
+
 
 #_____________________________________________________________
 class Account(grok.Model):
@@ -25,7 +65,20 @@ class Account(grok.Model):
     login = u''
     password = u''
     title = u''
-    role = 'gfn.Visitor'
+    roles = set('gfn.Visitor')
+
+    def rolesFromAccount(self):
+        roleMgr = IPrincipalRoleManager(grok.getSite())
+        for rid, _setting in roleMgr.getRolesForPrincipal('gfn.'+self.login):
+            roleMgr.unsetRoleForPrincipal(rid, 'gfn.'+self.login)
+        for role in self.roles:
+            roleMgr.assignRoleToPrincipal(role, 'gfn.'+self.login)
+
+    def accountFromRoles(self, login):
+        roleMgr = IPrincipalRoleManager(grok.getSite())
+        for rid, setting in roleMgr.getRolesForPrincipal('gfn.'+login):
+            if setting.getName() == 'Allow':
+                self.roles.add(rid)
 
     def __init__(self, user=None):
         self.user = user
@@ -33,7 +86,9 @@ class Account(grok.Model):
             self.login = user.login
             self.password = user.password
             self.title = user.title
-            self.role = getattr(user, 'role', self.role)
+            self.roles = set()
+            self.accountFromRoles(self.login)
+
 
 #_____________________________________________________________
 class InternalPrincipalAccount(grok.Adapter):
@@ -42,6 +97,7 @@ class InternalPrincipalAccount(grok.Adapter):
 
     def __new__(cls, principal):
         return Account(principal)
+
 
 #____________________________________________________________________________________
 class IUsers(Interface):
@@ -115,14 +171,15 @@ class Users(grok.Model):
             if account.login:
                 account = vdict[user]
                 p[user] = InternalPrincipal(login=account.login, title=account.title, password=account.password)
-                p[user].role = account.role
+                account.rolesFromAccount()
+
         for user in updated:
             u = p[user]
             account = vdict[user]
             if account.login and u.login != account.login: u.login=account.login
             u.title=account.title or ''
             if account.password: u.password=account.password
-            u.role = account.role
+            account.rolesFromAccount()
         self.do_search()
 
     @property
@@ -149,6 +206,7 @@ def AccountWidget():
     '''
     ow = CustomWidgetFactory(ObjectWidget, Account)    # Show accounts in the list as object widgets (sub-forms)
     return CustomWidgetFactory(ListSequenceWidget, subwidget=ow)
+
 
 #_____________________________________________________________
 class EditPrincipalForm(grok.EditForm):
@@ -193,6 +251,7 @@ class EditPrincipalForm(grok.EditForm):
         if n < 0: n = 0
         self.context.fromItem(n * BATCH_SIZE)
 
+
 #_____________________________________________________________________________________
 class EditPrincipals(grok.Viewlet):
     """ Renders the user management interface within the Content Area
@@ -202,19 +261,20 @@ class EditPrincipals(grok.Viewlet):
     grok.viewletmanager(Content)
 
 
-class EditPrincipalsNoAccess(grok.Viewlet):
-    """  Renders in the event where the user cannot access the management interface
-    """
-    grok.context(Users)
-    grok.require('zope.Public')
-    grok.viewletmanager(Content)
-
-    def render(self):
-        i = self.request.interaction
-        if not i.checkPermission('gfn.administering', self.context):
-            login = getMultiAdapter((self.context, self.request), name='login')
-            return login()
-        return ''
+#_____________________________________________________________________________________
+# class EditPrincipalsNoAccess(grok.Viewlet):
+#     """  Renders in the event where the user cannot access the management interface
+#     """
+#     grok.context(Users)
+#     grok.require('zope.Public')
+#     grok.viewletmanager(Content)
+#
+#     def render(self):
+#         i = self.request.interaction
+#         if not i.checkPermission('gfn.administering', self.context):
+#             login = getMultiAdapter((self.context, self.request), name='login')
+#             return login() or ''
+#         return ''
 
 #_____________________________________________________________________________________
 class PrincipalUsers(grok.Adapter):
@@ -233,5 +293,16 @@ class BackButtonMenuEntry(MenuItem):
     grok.context(Users)
     title = u'Back to Main'
     link = u'..'
+    mclass = 'nav buttons'
+
+#_____________________________________________________________________________________
+class UsersButtonMenuEntry(MenuItem):
+    '''  A menu item for articles with parent articles. IOW NoobsArticle
+    '''
+    grok.context(ISiteRoot)
+    grok.require(gfn.Administering)
+    grok.order(-4)
+    title = u'Manage Users'
+    link = u'/users'
     mclass = 'nav buttons'
 
