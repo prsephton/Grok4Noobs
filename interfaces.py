@@ -7,7 +7,10 @@ class ISourceHighlight(Interface):
     """ A utility which returns a formatted string highlighting syntax
     """
 
-class IAccount(Interface):
+#____________________________________________________________________________________
+class ISiteRoot(Interface):
+    """ Marks the site root for easy reference
+    """
     pass
 
 #____________________________________________________________________________________
