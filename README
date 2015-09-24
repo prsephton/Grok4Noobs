@@ -20,7 +20,7 @@ Installation (linux):
     Point your browser at localhost:8080 and log in.
     Create an instance of grok4noobs, and click on it's link.
 
-    To load the database:
+    To load the articles database:
         The default administrator has user: admin and password Admin
         You will need to log in as admin to restore the database.
 
