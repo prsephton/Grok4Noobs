@@ -7,6 +7,9 @@ from zope.schema.interfaces import IVocabularyFactory
 class Administering(grok.Permission):
     grok.name('gfn.administering')
 
+class Authenticated(grok.Permission):
+    grok.name('gfn.authenticated')
+
 class Editing(grok.Permission):
     grok.name('gfn.editing')
 
@@ -18,17 +21,17 @@ class Viewing(grok.Permission):
 class Administrator(grok.Role):
     grok.name('gfn.Administrator')
     grok.title(u'Administrator')
-    grok.permissions(Administering, Editing, Viewing)
+    grok.permissions(Authenticated, Administering, Editing, Viewing)
 
 class Editor(grok.Role):
     grok.name('gfn.Editor')
     grok.title(u'Editor')
-    grok.permissions(Editing, Viewing)
+    grok.permissions(Authenticated, Editing, Viewing)
 
 class Visitor(grok.Role):
     grok.name('gfn.Visitor')
     grok.title(u'Visitor')
-    grok.permissions(Viewing)
+    grok.permissions(Authenticated, Viewing)
 
 #_________________________________________________________________________________________
 # A vocabulary for our defined roles
