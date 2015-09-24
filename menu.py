@@ -2,12 +2,23 @@ import grok
 from layout import ILayout, Navigation
 from interfaces import IArticle, IArticleSorter
 
+
 class Menu(grok.Viewlet):
     grok.viewletmanager(Navigation)  # Render into the Navigation area
     grok.context(ILayout)            # for all instances of ILayout
 
+    def isEditable(self):
+        if not hasattr(self.context, 'navTitle'): return False
+        if self.context.navTitle is None: return False
+        i = self.request.interaction
+        if not i.checkPermission('gfn.editing', self.context):
+            return False
+        return True
+
+
 class MenuItems(grok.ViewletManager):
     grok.context(ILayout)            # This will be a list of <li /> elements
+
 
 class MenuItem(grok.Viewlet):
     ''' A base class for ad-hoc navigation menu items.
@@ -38,6 +49,7 @@ class MenuItem(grok.Viewlet):
                      self.href(), self.title))
         else:
             return ''
+
 
 class ContainerMenu(grok.Viewlet):
     ''' Render the items contained inside self.context.  The container menu must
