@@ -5,9 +5,10 @@
 import grok
 from grok4noobs import Grok4Noobs
 from sitelocal import ISiteLocalInstaller
+from interfaces import ISiteRoot
 
 from zope import schema
-from zope.component import Interface, queryUtility, getUtilitiesFor
+from zope.component import Interface, queryUtility, getUtilitiesFor, IComponentLookup
 from zope.authentication.interfaces import IAuthentication, IUnauthenticatedPrincipal, ILogout
 from zope.securitypolicy.interfaces import IPrincipalRoleManager
 
@@ -16,54 +17,46 @@ from zope.pluggableauth.plugins.principalfolder import PrincipalFolder, Internal
 
 from zope.pluggableauth.interfaces import ICredentialsPlugin, IAuthenticatorPlugin
 from zope.pluggableauth.plugins.session import SessionCredentialsPlugin
+
 from permissions import Administering
 
 from layout import ILayout, AuthSection
 import forms
 
 #_____________________________________________________________________________________
-# Define the credentials plugin and challenge form
-class CredentialsPlugin(grok.GlobalUtility, SessionCredentialsPlugin):
-    grok.provides(ICredentialsPlugin)
-    grok.name('credentials')
-
-    loginpagename = 'login'
-    loginfield = 'form.login'
-    passwordfield = 'form.password'
+def loggedIn(request):
+    ''' Convenience function tells us if we are logged in
+    '''
+    return not IUnauthenticatedPrincipal.providedBy(request.principal)
 
 
 #_____________________________________________________________________________________
-# Our login form implements login and password schema fields.
 class ILoginForm(Interface):
+    ''' Our login form implements login and password schema fields.
+    '''
     login = schema.BytesLine(title=u'Username', required=True)
     password = schema.Password(title=u'Password', required=True)
 
 
 #_____________________________________________________________________________________
-# Convenience function tells us if we are logged in
-def loggedIn(request):
-    return not IUnauthenticatedPrincipal.providedBy(request.principal)
-
-
-#_____________________________________________________________________________________
-# This is our login form.  It will render when and where we need it.
 class Login(forms.AddForm):
+    ''' This is our login form.  It will render when and where we need it.
+    '''
     grok.context(Interface)
     grok.require('zope.Public')
+    prefix = 'LoginForm'  # Field names are prefixed by this
 
     form_fields = grok.Fields(ILoginForm)
 
     @grok.action('login')
     def handle_login(self, **data):
-        auth = queryUtility(IAuthentication)
-        auth.authenticate(self.request)
-        self.redirect(self.url(self.context))
-#        self.redirect(self.request.form.get('camefrom', ''))
+        pass
 
 
 #_____________________________________________________________________________________
-# We can call this view to log out.
 class Logout(grok.View):
+    ''' We can call this view to log out from the cookie based login session.
+    '''
     grok.context(Interface)
     grok.require('zope.Public')
 
@@ -73,26 +66,37 @@ class Logout(grok.View):
             ILogout(auth).logout(self.request)
 
     def render(self):
-        return '<p>You have been logged out</p>'
+        self.redirect(self.url(self.context))
+
 
 #_____________________________________________________________________________________
 class Status(grok.Viewlet):
-    ''' Auth area for layout
+    ''' Renders the login form in Authentication area for layout
     '''
     grok.context(ILayout)
     grok.viewletmanager(AuthSection)
     grok.require('zope.Public')
 
     def loggedIn(self):
+        ''' Tries to authenticate if not already authenticated. Returns status.
+        '''
+        if not loggedIn(self.request):
+            auth = queryUtility(IAuthentication)
+            if auth is not None:
+                auth.authenticate(self.request)
         return loggedIn(self.request)
 
     def greeting(self):
+        ''' Returns a greeting depending on the time of day
+        '''
         from datetime import datetime as dt
         hour = dt.now().hour
         tod = "Morning" if hour < 12 else "Afternoon" if hour < 18 else "Evening"
         return "Good %s, %s" % (tod, self.request.principal.title)
 
     def zopeLogin(self):
+        ''' Zope management by default uses a Basic Auth login with a 'zope' prefix
+        '''
         if self.loggedIn():
             ns = self.request.principal.id.split('.')
             if len(ns) > 1: ns = ns[0]
@@ -100,22 +104,90 @@ class Status(grok.Viewlet):
         return False
 
     def logoutLink(self):
+        ''' If this is a Basic Auth login, redirect to challenge site,
+            otherwise to our own logout view
+        '''
         if self.zopeLogin():
             site = self.view.url("/").split("//")[1].split("/")[0]
             return "http://log:out@%s/." % site
         else:
             return self.view.url(self.context, "logout")
 
+
 #_____________________________________________________________________________________
-# Install a Pluggable Authentication Utility as a local utility in the
-# Grok4Noobs application.  We have to jump through a few hoops if we want to
-# support installing local utilities without reinstalling our application.
-def setup_authentication(ob):
-    """ Set up pluggable authentication utility.
-    """
-    ob.credentialsPlugins = ['credentials']       # Name of utility for ICredentialsPlugin
-    ob.authenticatorPlugins = ['users']           # Name of utility for IAuthenticatorPlugin
-    ob.prefix = 'gfn.'
+class PluggableAuthenticatorPlugin(grok.LocalUtility, PluggableAuthentication):
+    ''' The Pluggable Authentication Utility mechanism provided by the
+        Zope Toolkit is very flexible.  It allows registration of utilities
+        which retrieve credentials from the request, or provide authentication.
+        One way to use it, is to use component lookup via the ZCA by name.
+        Another way is to simply include instances of the plugins directly
+        inside the PluggableAuthentication, as it is a persistent container
+        in it's own right.
+    '''
+    grok.implements(IAuthentication)
+    grok.site(ISiteRoot)
+    grok.name('pau')
+
+    def __init__(self):
+        super(PluggableAuthenticatorPlugin, self).__init__()
+        self.credentialsPlugins = ['credentials']       # Name of utility for ICredentialsPlugin
+        self.authenticatorPlugins = ['users']           # Name of utility for IAuthenticatorPlugin
+        self.prefix = 'gfn.'
+
+
+#_____________________________________________________________________________________
+class PluginSiteFinder(grok.Adapter):
+    ''' To allow the our PluggableAuthentication to find the site where our
+        plugins reside, the utility is adapted internally to a IComponentLookup.
+        If we are installing the local utility manually, we need to provide
+        an adapter ourselves.
+    '''
+    grok.context(PluggableAuthentication)
+    grok.provides(IComponentLookup)
+
+    def __new__(cls, context):
+        site = grok.getSite()
+        return site.getSiteManager()
+
+
+#_____________________________________________________________________________________
+class AuthenticatorPlugin(grok.LocalUtility, PrincipalFolder):
+    ''' The Zope toolkit provides a few folder based authenticator plugins.
+        Here, we build a PAU plugin as a local utility based on the PrincipalFolder,
+        which already implements IAuthenticatorPlugin.
+        To use an external authenticator, eg. LDAP, one would implement the
+        IAuthenticatorPlugin interface directly.
+    '''
+    grok.implements(IAuthenticatorPlugin)
+    grok.site(ISiteRoot)
+    grok.name('users')
+
+    def __init__(self):
+        ''' Create an administrator with default login and password
+        '''
+        super(AuthenticatorPlugin, self).__init__()
+
+        su = InternalPrincipal(login='admin', password='Admin', title=u'Administrator', description=u'The SuperUser')
+        self['admin'] = su
+
+        roleMgr = IPrincipalRoleManager(grok.getSite())
+        for uid, _setting in roleMgr.getPrincipalsForRole('gfn.Administrator'):
+            roleMgr.unsetRoleForPrincipal('gfn.Administrator', 'gfn.'+uid)
+
+        uid = self.getIdByLogin('admin')
+        roleMgr.assignRoleToPrincipal('gfn.Administrator', 'gfn.'+uid)
+
+
+#_____________________________________________________________________________________
+class CredentialsPlugin(grok.GlobalUtility, SessionCredentialsPlugin):
+    ''' Define the credentials plugin and challenge form fields
+    '''
+    grok.provides(ICredentialsPlugin)
+    grok.name('credentials')
+
+    loginpagename = 'login'
+    loginfield = 'LoginForm.login'
+    passwordfield = 'LoginForm.password'
 
 
 #_____________________________________________________________________________________
@@ -124,33 +196,18 @@ class InstallAuth(grok.View):
     ''' If we call this view, we want to reinstall authentication
     '''
     grok.context(Grok4Noobs)
-    grok.require('zope.Public')
-#    grok.require(Administering)
+#    grok.require('zope.Public')
+    grok.require(Administering)
 
     def update(self):
-        # Install a new principals folder and provide it as a global utility
-        if not hasattr(self.context, 'principals'):
-            self.context.principals = PrincipalFolder(u'principal.')
-            # Register principals folder as a local utility
-
-        # Install a default superuser
-            if 'admin' in self.context.principals: del self.context.principals['admin']
-            su = InternalPrincipal(login='admin', password='Admin', title=u'Administrator', description=u'The SuperUser')
-            self.context.principals['admin'] = su
-            roleMgr = IPrincipalRoleManager(self.context)
-            for uid, _setting in roleMgr.getPrincipalsForRole('gfn.Administrator'):
-                roleMgr.unsetRoleForPrincipal('gfn.Administrator', uid)
-            uid = self.context.principals.getIdByLogin('admin')
-            roleMgr.assignRoleToPrincipal('gfn.Administrator', 'gfn.'+uid)
-
-            # Register the PAU as a local utility
-            installer = ISiteLocalInstaller(self.context)
-            installer.registerUtility(PluggableAuthentication,
-                                      provided=IAuthentication,
-                                      setup=setup_authentication)
-
+        # Register the PAU as a local utility
         installer = ISiteLocalInstaller(self.context)
-        installer.registerUtility(self.context.principals,
+
+        installer.registerUtility(PluggableAuthenticatorPlugin,
+                                  provided=IAuthentication,
+                                  name='pau')
+
+        installer.registerUtility(AuthenticatorPlugin,
                                   provided=IAuthenticatorPlugin,
                                   name='users')
 
