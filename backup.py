@@ -3,7 +3,9 @@ from io import FileIO
 from grok4noobs import Grok4Noobs, NoobsArticle
 from attachments import Attachments, Source, Image
 from urllib import quote_plus
-
+from permissions import Administering
+from interfaces import ISiteRoot
+from menu import MenuItem
 
 def write_objs(f, objs):
     '''  Just write the objects in a way that lets us read them again
@@ -71,13 +73,13 @@ def do_restore(f, node):
         art = NoobsArticle()
         art.order = order
         do_restore(f, art)
-        ntitle = quote_plus(art.navTitle)
-        node[ntitle] = art
+        nTitle = quote_plus(art.navTitle)
+        node[nTitle] = art
 
 
 class backup(grok.View):
     grok.context(Grok4Noobs)
-    grok.require('zope.Public')
+    grok.require(Administering)
 
     def update(self):
         fname = 'backup.dat'
@@ -90,7 +92,7 @@ class backup(grok.View):
 
 class restore(grok.View):
     grok.context(Grok4Noobs)
-    grok.require('zope.Public')
+    grok.require(Administering)
 
     def update(self):
         fname = 'backup.dat'
@@ -100,3 +102,24 @@ class restore(grok.View):
     def render(self):
         return 'restore complete.'
 
+
+class BackupButton(MenuItem):
+    '''  A menu item for making a data backup
+    '''
+    grok.context(ISiteRoot)
+    grok.require(Administering)
+    grok.order(-7)
+    title = u'Backup Data'
+    link = u'/backup'
+    mclass = 'nav buttons'
+
+
+class RestoreButton(MenuItem):
+    '''  A menu item for restoring from backup
+    '''
+    grok.context(ISiteRoot)
+    grok.require(Administering)
+    grok.order(-6)
+    title = u'Restore Data'
+    link = u'/restore'
+    mclass = 'nav buttons'
