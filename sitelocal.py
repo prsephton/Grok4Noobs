@@ -4,6 +4,7 @@
 import grok
 from zope.component import Interface
 from zope.location.interfaces import ISite
+from zope.site.site import SiteManagementFolder
 
 class ISiteLocalInstaller(Interface):
     '''  Describes the registration interface
@@ -26,11 +27,16 @@ class SiteLocalInstaller(grok.Adapter):
         ''' Unregister a local utility from the site
         '''
         sm = self.context.getSiteManager()
+        folder = None
+        if 'default' in sm.keys():
+            folder = sm['default']
+
         util = sm.queryUtility(provided, name=name)
         if util is not None:
             print 'delete %s' % util
             sm.unregisterUtility(provided=provided, name=name)
-            del util
+            if folder and name in folder: del folder[name]
+
             # del sm.utilities._adapters[0][provided]
             # del sm.utilities._subscribers[0][provided]
             # sm.utilities.unsubscribe((), provided)
@@ -40,12 +46,24 @@ class SiteLocalInstaller(grok.Adapter):
         ''' Register a new local utility with the site.  If it already exists
             we remove the old one first
         '''
+
         sm = self.context.getSiteManager()
+        if 'default' in sm.keys():
+            folder = sm['default']
+        else:
+            folder = sm['default'] = SiteManagementFolder()
+
         old = sm.queryUtility(provided, name=name)
-        if old: sm.unregisterUtility(provided=provided, name=name)
+        if old is not None:
+            sm.unregisterUtility(provided=provided, name=name)
+            if name in folder: del folder[name]
+            if name in sm: del sm[name]
+
         try:
             obj = factory()
         except:
             obj = factory
+        if name in folder: del folder[name]
+        folder[name] = obj
         sm.registerUtility(obj, provided=provided, name=name)
         if setup: setup(obj)
