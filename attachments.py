@@ -11,6 +11,7 @@ from resource import textStyle, popups, style
 from layout import Content, ILayout
 from colorise import ISourceHighlight
 from menu import MenuItem
+from permissions import Editing
 
 #____________________________________________________________________________________
 class ResourceTypes(grok.GlobalUtility):
@@ -56,6 +57,7 @@ class BackButton(MenuItem):
 #____________________________________________________________________________________
 class ManageAttachments(MenuItem):
     grok.context(IArticle)
+    grok.require(Editing)
     grok.order(-1)
     title = u'Manage Attachments'
     link = u'attachments'
@@ -145,7 +147,7 @@ class ListAttachments(grok.Viewlet):
 class ModifySource(grok.EditForm):
     grok.context(Source)
     grok.name('modify')
-    grok.require('zope.Public')
+    grok.require(Editing)
 
     def setUpWidgets(self, ignore_request=False):
         super(ModifySource, self).setUpWidgets(ignore_request)
@@ -175,7 +177,7 @@ class ModifySource(grok.EditForm):
 class ModifyImage(grok.EditForm):
     grok.context(Image)
     grok.name('modify')
-    grok.require('zope.Public')
+    grok.require(Editing)
 
     form_fields = grok.AutoFields(Image).omit('text', 'fmt')
 
@@ -198,7 +200,7 @@ class ModifyImage(grok.EditForm):
 class EditAttachment(grok.EditForm):
     grok.context(IAttachment)
     grok.name('edit')
-    grok.require('zope.Public')
+    grok.require(Editing)
 
     camefrom = None
 
@@ -224,7 +226,7 @@ class EditAttachment(grok.EditForm):
 class DeleteAttachment(grok.EditForm):
     grok.context(IAttachment)
     grok.name('delete')
-    grok.require('zope.Public')
+    grok.require(Editing)
     form_fields = grok.Fields(IAttachment).omit('fdata', 'text')
 
     @grok.action(u'Yes, Delete this attachment')
@@ -263,7 +265,7 @@ class AddAttachment(grok.EditForm):
     grok.context(IArticle)
     form_fields = grok.Fields(IAttachment)    # Use the ArticleAttachment adapter
     grok.name('attach')
-    grok.require('zope.Public')
+    grok.require(Editing)
 
     def setUpWidgets(self, ignore_request=False):
         super(AddAttachment, self).setUpWidgets(ignore_request)

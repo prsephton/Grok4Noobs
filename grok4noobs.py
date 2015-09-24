@@ -5,6 +5,7 @@
 '''
 import grok
 from interfaces import IArticle, IArticleSorter, ISiteRoot
+from permissions import Editing
 from users import IUsers
 from layout import ILayout, Navigation, Content
 from menu import MenuItem
@@ -108,6 +109,7 @@ class SorterLink(MenuItem):
     ''' A conditional menu item which shows for articles with more than one child
     '''
     grok.context(IArticle)
+    grok.require(Editing)
     grok.order(-1)
     title = u'Change menu order'
     link = u'sorter'
@@ -121,11 +123,13 @@ class DeleteButton(grok.Viewlet):
     '''
     grok.viewletmanager(Navigation)  # Render into the Navigation area
     grok.context(NoobsArticle)       # for normal articles
+    grok.require(Editing)
 
 class Edit(forms.EditForm):
     '''  Renders the article editor. This includes the tinyMCE HTML editor
     '''
     grok.context(IArticle)
+    grok.require(Editing)
 
     def hidden(self):  # persists the request 'edit' form variable
         return [dict(name='edit', value='')]
@@ -155,6 +159,7 @@ class Add(forms.AddForm):
     '''
     grok.context(IArticle)
     form_fields = grok.Fields(IArticle).omit('text')
+    grok.require(Editing)
 
     def hidden(self): # persists the request 'add' form variable
         return [dict(name='add', value='')]
@@ -176,6 +181,7 @@ class Delete(forms.EditForm):
     '''
     grok.context(NoobsArticle)       # for normal articles
     form_fields = grok.AutoFields(NoobsArticle).omit('text')
+    grok.require(Editing)
 
     def setUpWidgets(self, ignore_request=False):
         self.form_fields['title'].field.readonly = True

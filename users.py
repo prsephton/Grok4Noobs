@@ -1,5 +1,5 @@
 import grok
-from zope.component import Interface, getMultiAdapter
+from zope.component import Interface
 from layout import ILayout, Content
 from zope.schema import List, Object, TextLine, Password, Choice, Set
 from zope.pluggableauth.plugins.principalfolder import IInternalPrincipal, IInternalPrincipalContainer
@@ -69,6 +69,8 @@ class Account(grok.Model):
 
     def rolesFromAccount(self):
         roleMgr = IPrincipalRoleManager(grok.getSite())
+        if self.login == 'admin':
+            self.roles.add('gfn.Administrator')
         for rid, _setting in roleMgr.getRolesForPrincipal('gfn.'+self.login):
             roleMgr.unsetRoleForPrincipal(rid, 'gfn.'+self.login)
         for role in self.roles:
@@ -260,21 +262,6 @@ class EditPrincipals(grok.Viewlet):
     grok.require(gfn.Administering)
     grok.viewletmanager(Content)
 
-
-#_____________________________________________________________________________________
-# class EditPrincipalsNoAccess(grok.Viewlet):
-#     """  Renders in the event where the user cannot access the management interface
-#     """
-#     grok.context(Users)
-#     grok.require('zope.Public')
-#     grok.viewletmanager(Content)
-#
-#     def render(self):
-#         i = self.request.interaction
-#         if not i.checkPermission('gfn.administering', self.context):
-#             login = getMultiAdapter((self.context, self.request), name='login')
-#             return login() or ''
-#         return ''
 
 #_____________________________________________________________________________________
 class PrincipalUsers(grok.Adapter):
