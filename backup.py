@@ -74,6 +74,7 @@ def do_restore(f, node):
         art.order = order
         do_restore(f, art)
         nTitle = quote_plus(art.navTitle)
+        if nTitle in node: del node[nTitle]
         node[nTitle] = art
 
 
@@ -87,7 +88,7 @@ class backup(grok.View):
             do_backup(f, self.context)
 
     def render(self):
-        return 'backup complete.'
+        self.redirect(self.url(self.context))
 
 
 class restore(grok.View):
@@ -100,7 +101,7 @@ class restore(grok.View):
             do_restore(f, self.context)
 
     def render(self):
-        return 'restore complete.'
+        self.redirect(self.url(self.context))
 
 
 class BackupButton(MenuItem):
