@@ -79,6 +79,8 @@ def do_restore(f, node):
 
 
 class backup(grok.View):
+    ''' A view which executes the backup function
+    '''
     grok.context(Grok4Noobs)
     grok.require(Administering)
 
@@ -92,6 +94,8 @@ class backup(grok.View):
 
 
 class restore(grok.View):
+    ''' A view which executes the restore function
+    '''
     grok.context(Grok4Noobs)
     grok.require(Administering)
 
