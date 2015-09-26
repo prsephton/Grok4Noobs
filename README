@@ -21,10 +21,11 @@ Installation (linux):
     Create an instance of grok4noobs, and click on it's link.
 
     To load the articles database:
+        Copy the data backup from source:
+            cp ~/mygrok/src/mygrok/grok4noobs/db/* ~/mygrok
+
         The default administrator has user: admin and password Admin
         You will need to log in as admin to restore the database.
-
-        cp ~/mygrok/src/mygrok/grok4noobs/db/* ~/mygrok
 
         After logging in as admin, you can click the "Restore Data" button
         You should get a message that the wiki data has been loaded
