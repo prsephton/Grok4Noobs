@@ -47,12 +47,11 @@ class Grok4Noobs(grok.Application, ArticleContainer):
     grok.traversable('attachments')
     grok.traversable('sorter')
     grok.traversable('users')
+
     def users(self):
         sm = self.getSiteManager()
-        if 'default' in sm:
-            folder = sm['default']
-            if 'users' in folder:
-                return IUsers(folder['users'])
+        if 'users' in sm:
+            return IUsers(sm['users'])
 
 
 class TextViewlet(grok.Viewlet):
@@ -60,6 +59,7 @@ class TextViewlet(grok.Viewlet):
     '''
     grok.context(IArticle)
     grok.viewletmanager(Content)
+
 
 class PreviousLevelMenuEntry(MenuItem):
     '''  A menu item for articles with parent articles. IOW NoobsArticle
