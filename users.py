@@ -162,7 +162,9 @@ class Users(grok.Model):
         return self._accounts
     @users.setter
     def users(self, values):
-        vdict = {account.login:account for account in values}
+        vdict = {}
+        for account in values:
+            vdict[account.login] = account
         a = set([account.login for account in self._accounts])
         v = set([account.login for account in values])
         deleted = a.difference(v)
