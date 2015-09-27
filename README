@@ -4,16 +4,24 @@ a working grok project which explains how it is implemented.
 Installation (linux):
     assuming you are in your home directory
     sudo pip install grokproject
-    sudo pip install pygments
     grokproject mygrok
+
     extract this project into mygrok/src/mygrok/
         cd mygrok/src/mygrok/
         git clone https://github.com/prsephton/Grok4Noobs.git
-    edit mygrok/setup.py and change the entry_points section to contain
+
+    edit mygrok/setup.py and
+        add the following items below the # Add extra requirements here
+                        'Pygments',
+                        'zope.pluggableauth',
+                        'zope.app.schema',
+
+        change the entry_points section to contain
           'fanstatic.libraries': [
               'mygrok            = mygrok.resource:library',
               'mygrok.grok4noobs    = mygrok.grok4noobs.resource:library',
           ]
+
     cd ~/mygrok
     bin/buildout
     bin/paster serve --reload parts/etc/deploy.ini  # Starts the server
