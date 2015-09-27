@@ -12,10 +12,10 @@ from zope.authentication.interfaces import IAuthentication, IUnauthenticatedPrin
 from zope.securitypolicy.interfaces import IPrincipalRoleManager
 
 from zope.pluggableauth import PluggableAuthentication
-from zope.pluggableauth.plugins.principalfolder import PrincipalFolder, InternalPrincipal
 
 from zope.pluggableauth.interfaces import ICredentialsPlugin, IAuthenticatorPlugin
 from zope.pluggableauth.plugins.session import SessionCredentialsPlugin
+from zope.pluggableauth.plugins.principalfolder import PrincipalFolder, InternalPrincipal
 
 from permissions import Administering
 
@@ -23,7 +23,7 @@ from layout import ILayout, AuthSection
 import forms
 
 #_____________________________________________________________________________________
-def loggedIn(request):
+def isLoggedIn(request):
     ''' Convenience function tells us if we are logged in
     '''
     return not IUnauthenticatedPrincipal.providedBy(request.principal)
@@ -61,6 +61,8 @@ class Login(forms.AddForm):
             installer.registerUtility(AuthenticatorPlugin,
                                       provided=IAuthenticatorPlugin,
                                       name='users')
+            pau = queryUtility(IAuthentication)
+            if pau is not None: pau.authenticate(self.request)
             self.redirect(self.url(self.context, data=data))
 
 
@@ -72,7 +74,7 @@ class Logout(grok.View):
     grok.require('zope.Public')
 
     def update(self):
-        if loggedIn(self.request):
+        if isLoggedIn(self.request):
             auth = queryUtility(IAuthentication)
             ILogout(auth).logout(self.request)
 
@@ -91,11 +93,11 @@ class Status(grok.Viewlet):
     def loggedIn(self):
         ''' Tries to authenticate if not already authenticated. Returns status.
         '''
-        if not loggedIn(self.request):
+        if not isLoggedIn(self.request):
             auth = queryUtility(IAuthentication)
             if auth is not None:
                 auth.authenticate(self.request)
-        return loggedIn(self.request)
+        return isLoggedIn(self.request)
 
     def greeting(self):
         ''' Returns a greeting depending on the time of day
