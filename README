@@ -4,6 +4,7 @@ a working grok project which explains how it is implemented.
 Installation (linux):
     assuming you are in your home directory
     sudo pip install grokproject
+    sudo pip install pygments
     grokproject mygrok
     extract this project into mygrok/src/mygrok/
         cd mygrok/src/mygrok/
