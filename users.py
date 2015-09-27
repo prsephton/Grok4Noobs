@@ -285,7 +285,7 @@ class BackButtonMenuEntry(MenuItem):
     '''
     grok.context(Users)
     title = u'Back to Main'
-    link = u'..'
+    link = b'..'
     mclass = 'nav buttons'
 
 #_____________________________________________________________________________________
@@ -296,6 +296,6 @@ class UsersButtonMenuEntry(MenuItem):
     grok.require(gfn.Administering)
     grok.order(-4)
     title = u'Manage Users'
-    link = u'/users'
+    link = b'/users'
     mclass = 'nav buttons'
 
