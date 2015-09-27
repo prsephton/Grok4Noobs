@@ -42,7 +42,7 @@ class HSetVocabularyWidget(grok.MultiAdapter):
     grok.provides(IInputWidget)
 
     def __new__(cls, context, vocab, request):
-            w=MyMultiCheckboxWidget(context,vocab,request)
+            w=MultiCheckBoxWidget(context,vocab,request)
             w.orientation = 'horizontal'
             return w
 
@@ -68,6 +68,8 @@ class Account(grok.Model):
     roles = set('gfn.Visitor')
 
     def rolesFromAccount(self):
+        ''' Populate the managed roles for this principal from self.roles
+        '''
         roleMgr = IPrincipalRoleManager(grok.getSite())
         if self.login == 'admin':
             self.roles.add('gfn.Administrator')
@@ -77,6 +79,8 @@ class Account(grok.Model):
             roleMgr.assignRoleToPrincipal(role, 'gfn.'+self.login)
 
     def accountFromRoles(self, login):
+        ''' Populate self.roles by querying the role manager
+        '''
         roleMgr = IPrincipalRoleManager(grok.getSite())
         for rid, setting in roleMgr.getRolesForPrincipal('gfn.'+login):
             if setting.getName() == 'Allow':
