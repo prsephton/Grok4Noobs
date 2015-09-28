@@ -1,7 +1,7 @@
 import grok
 from io import FileIO
 from grok4noobs import Grok4Noobs, NoobsArticle
-from attachments import Attachments, Source, Image
+from attachments import Attachments, Source, Imag
 from urllib import quote_plus
 from permissions import Administering
 from interfaces import ISiteRoot
@@ -115,7 +115,7 @@ class BackupButton(MenuItem):
     grok.require(Administering)
     grok.order(-7)
     title = u'Backup Data'
-    link = u'/backup'
+    link = 'backup'
     mclass = 'nav buttons'
 
 
@@ -126,5 +126,5 @@ class RestoreButton(MenuItem):
     grok.require(Administering)
     grok.order(-6)
     title = u'Restore Data'
-    link = u'/restore'
+    link = 'restore'
     mclass = 'nav buttons'
