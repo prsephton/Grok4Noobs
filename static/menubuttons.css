@@ -71,7 +71,7 @@ div.buttons > a, ul.menu > li.buttons > a {
 
 	margin: auto;
     padding:1px 0.5em;
-    height:1.4em;
+    min-height:1.4em;
     line-height:1.2em;
     overflow:hidden;
 
