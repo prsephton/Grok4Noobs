@@ -66,11 +66,11 @@ class PreviousLevelMenuEntry(MenuItem):
     '''
     grok.context(NoobsArticle)
     grok.order(-4)
-    title = u'Up a level'
+    title = mtitle = u'Up a level'
     link = u'..'
     mclass = 'nav buttons'
     def condition(self):
-        self.mtitle = self.context.__parent__.navTitle
+        self.title = self.context.__parent__.navTitle
         return True
 
 class PrevMenuEntry(MenuItem):
@@ -78,7 +78,7 @@ class PrevMenuEntry(MenuItem):
     '''
     grok.context(NoobsArticle)
     grok.order(-3)
-    title = u'Prev Page'
+    title = mtitle = u'Prev Page'
     mclass = 'nav buttons'
     @property
     def link(self):
@@ -86,7 +86,7 @@ class PrevMenuEntry(MenuItem):
         return self.context.__parent__[title]
     def condition(self):
         if getattr(self.context, 'prev', None) is not None:
-            self.mtitle = self.context.prev
+            self.title = self.context.prev
             return True
 
 class NextMenuEntry(MenuItem):
@@ -94,7 +94,7 @@ class NextMenuEntry(MenuItem):
     '''
     grok.context(NoobsArticle)
     grok.order(-2)
-    title = u'Next Page'
+    title = mtitle = u'Next Page'
     mclass = 'nav buttons'
     @property
     def link(self):
@@ -102,7 +102,7 @@ class NextMenuEntry(MenuItem):
         return self.context.__parent__[title]
     def condition(self):
         if getattr(self.context, 'next', None) is not None:
-            self.mtitle = self.context.next
+            self.title = self.context.next
             return True
 
 class SorterLink(MenuItem):
