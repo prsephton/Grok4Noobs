@@ -1,7 +1,7 @@
 import grok
 from io import FileIO
 from grok4noobs import Grok4Noobs, NoobsArticle
-from attachments import Attachments, Source, Imag
+from attachments import Attachments, Source, Image
 from urllib import quote_plus
 from permissions import Administering
 from interfaces import ISiteRoot
