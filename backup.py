@@ -7,6 +7,10 @@ from permissions import Administering
 from interfaces import ISiteRoot
 from menu import MenuItem
 
+def dbPath():
+    from os.path import dirname
+    return dirname(__file__)+"/db/backup.dat"
+
 def write_objs(f, objs):
     '''  Just write the objects in a way that lets us read them again
     '''
@@ -85,8 +89,7 @@ class backup(grok.View):
     grok.require(Administering)
 
     def update(self):
-        fname = 'backup.dat'
-        with FileIO(fname, 'w') as f:
+        with FileIO(dbPath(), 'w') as f:
             do_backup(f, self.context)
 
     def render(self):
@@ -100,8 +103,7 @@ class restore(grok.View):
     grok.require(Administering)
 
     def update(self):
-        fname = 'backup.dat'
-        with FileIO(fname, 'r') as f:
+        with FileIO(dbPath(), 'r') as f:
             do_restore(f, self.context)
 
     def render(self):
