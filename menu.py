@@ -30,8 +30,10 @@ class MenuItem(grok.Viewlet):
     title = u''
     link  = u''
     mclass = ''
+    dclass = ''
     mtitle = ''
-
+    image = None
+    
     def condition(self):
         return True
 
@@ -43,10 +45,14 @@ class MenuItem(grok.Viewlet):
 
     def render(self):
         if self.condition():
-            return ("""<li class="menuItem%s%s" title="%s"><a href="%s">%s</a></li>""" %
+            img = ''
+            if self.image is not None:
+                img = '''<img src="{}" />'''.format(self.image)
+                
+            return ("""<li class="menuItem%s%s" title="%s"><a href="%s">%s%s</a></li>""" %
                     (' selected' if self.selected() else '',
                      ' %s'%self.mclass if len(self.mclass) else '', self.mtitle,
-                     self.href(), self.title))
+                     self.href(), img, self.title))
         else:
             return ''
 
