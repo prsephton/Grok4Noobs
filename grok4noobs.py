@@ -71,6 +71,7 @@ class PreviousLevelMenuEntry(MenuItem):
     mclass = 'nav buttons'
     def condition(self):
         self.title = self.context.__parent__.navTitle
+        self.image = self.static['up.png']
         return True
 
 class PrevMenuEntry(MenuItem):
@@ -87,6 +88,7 @@ class PrevMenuEntry(MenuItem):
     def condition(self):
         if getattr(self.context, 'prev', None) is not None:
             self.title = self.context.prev
+            self.image = self.static['left.png']
             return True
 
 class NextMenuEntry(MenuItem):
@@ -103,6 +105,7 @@ class NextMenuEntry(MenuItem):
     def condition(self):
         if getattr(self.context, 'next', None) is not None:
             self.title = self.context.next
+            self.image = self.static['right.png']
             return True
 
 class SorterLink(MenuItem):
