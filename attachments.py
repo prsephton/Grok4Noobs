@@ -80,7 +80,7 @@ class Image(grok.Model):
         self.fdata = fdata
         self.text = text
     def link(self):
-        return '''<img src="attachments/%s" />''' % self.name
+        return '''<img src="attachments/{}" />'''.format(self.name)
 
 #____________________________________________________________________________________
 class ShowImage(grok.View):
@@ -275,7 +275,6 @@ class AddAttachment(grok.EditForm):
         ''' As this view is called directly and displayed in a dialog window, we need to add the
             css style explicitly.  Also, grok.EditForm includes the HTML header.
         '''
-        from resource import style
         style.need()
 
     @grok.action(u'Add this resource')
