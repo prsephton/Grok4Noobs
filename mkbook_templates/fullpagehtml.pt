@@ -1,0 +1,22 @@
+<!doctype html>
+<html itemscope="itemscope" itemtype="http://schema.org/WebPage" xmlns="http://www.w3.org/1999/xhtml"
+	xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n" lang="en">
+	<head>
+		<meta content="IE=9" http-equiv="X-UA-Compatible" />
+		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+		<meta name="viewport" content="width=device-width user-scalable=no" />
+		<title tal:content="context/title | context/description | string:Untitled" />
+		<meta name="author" content="Paul Sephton"/>
+		<meta name="subject" content="A book introducing the Grok web framework"/>
+		<meta name="keywords" content="grok python zope web framework"/>
+		<meta name="date" content="2015-10-03"/>
+		<meta name="generator" content="PrinceXML (www.princexml.com)"/>
+	</head>
+	<body i18n:domain="camibox" class="plainText" >
+		<h1 class='bookTitle'>Grok 4 Noobs.</h1>
+		
+		<div class="sectionItems" tal:content="structure context/@@pagesimplehtml"></div>
+	</body>
+</html>

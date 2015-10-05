@@ -1,0 +1,9 @@
+<h2 class='aTitle' tal:content="context/title"></h2>
+
+<div class='Content' tal:replace='structure view/articleContent' />	
+
+<div class="sectionItem" tal:repeat="ctx view/sortedItems">
+	<div tal:replace="structure ctx/@@pagesimplehtml">
+	  section text     
+	</div>
+</div>
