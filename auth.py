@@ -178,7 +178,8 @@ class AuthenticatorPlugin(PrincipalFolder, grok.LocalUtility):
         '''
         super(AuthenticatorPlugin, self).__init__(*args, **kwargs)
 
-        su = InternalPrincipal(login='admin', password='Admin', title=u'Administrator', description=u'The SuperUser')
+        su = InternalPrincipal(login='admin', password='Admin', title=u'Administrator', 
+                               description=u'The SuperUser')
         self['admin'] = su
 
         roleMgr = IPrincipalRoleManager(grok.getSite())
