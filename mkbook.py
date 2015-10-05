@@ -53,7 +53,7 @@ class MkBook(grok.View):
     
     def render(self):
         url = self.url(self.context, name='fullpagehtml')
-        
+
         try:
             result = subprocess.check_output(['prince', url, '-o', '-'])
         except:
