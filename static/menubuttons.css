@@ -104,3 +104,8 @@ div.buttons > a:hover, ul.menu > li.buttons > a:hover {
     background-image: linear-gradient(bottom, #AAEAAA, #CAFACA);
 }
 
+ul.menu > li.buttons > a > img {
+	display:block; 
+	float:left; 
+	height:20px;
+}

@@ -134,3 +134,14 @@ div.highlight > pre {
 	background-color:#10102A;
     color: white;
 }
+
+body.plainText pre {
+	background-color: #FAFAFA;
+    color: #000010;
+    max-height:none;
+    font-size:8.5pt;
+    font-stretch: narrower;
+    width:95%;
+    margin: 0 2%;
+    padding: 0.5em;
+}
