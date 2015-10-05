@@ -37,3 +37,5 @@ Installation (linux):
         After logging in as admin, you can click the "Restore Data" button
         You should get a message that the wiki data has been loaded
 
+    If you want to support the export of content as a printable PDF, then
+    you will also want to install prince (www.princexml.com)
