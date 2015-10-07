@@ -4,7 +4,7 @@
 import grok
 
 from interfaces import ISiteRoot, IArticle, IArticleSorter
-from menu import MenuItem
+from menu import UtilItem
 from resource import style, textLight
 import subprocess
 
@@ -65,12 +65,12 @@ class MkBook(grok.View):
         return result
 
 
-class MkBookButton(MenuItem):
+class MkBookButton(UtilItem):
     '''  A menu item that turns the site into a book
     '''
     grok.context(ISiteRoot)
     grok.require('zope.Public')
-    grok.order(-9)
+    grok.order(-1)
     title = u'Create Book'
     link = 'mkbook'
     mclass = 'nav buttons'

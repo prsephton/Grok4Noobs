@@ -8,7 +8,7 @@ from interfaces import IArticle, IArticleSorter, ISiteRoot
 from permissions import Editing
 from users import IUsers
 from layout import ILayout, Navigation, Content
-from menu import MenuItem
+from menu import UtilItem
 from urllib import quote_plus
 import forms
 
@@ -61,7 +61,7 @@ class TextViewlet(grok.Viewlet):
     grok.viewletmanager(Content)
 
 
-class PreviousLevelMenuEntry(MenuItem):
+class PreviousLevelMenuEntry(UtilItem):
     '''  A menu item for articles with parent articles. IOW NoobsArticle
     '''
     grok.context(NoobsArticle)
@@ -74,7 +74,7 @@ class PreviousLevelMenuEntry(MenuItem):
         self.image = self.static['up.png']
         return True
 
-class PrevMenuEntry(MenuItem):
+class PrevMenuEntry(UtilItem):
     '''  A menu item for previous articles in the list
     '''
     grok.context(NoobsArticle)
@@ -91,7 +91,7 @@ class PrevMenuEntry(MenuItem):
             self.image = self.static['left.png']
             return True
 
-class NextMenuEntry(MenuItem):
+class NextMenuEntry(UtilItem):
     '''  A menu item for articles next in the list
     '''
     grok.context(NoobsArticle)
@@ -108,7 +108,7 @@ class NextMenuEntry(MenuItem):
             self.image = self.static['right.png']
             return True
 
-class SorterLink(MenuItem):
+class SorterLink(UtilItem):
     ''' A conditional menu item which shows for articles with more than one child
     '''
     grok.context(IArticle)

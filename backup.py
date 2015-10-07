@@ -5,7 +5,7 @@ from attachments import Attachments, Source, Image
 from urllib import quote_plus
 from permissions import Administering
 from interfaces import ISiteRoot
-from menu import MenuItem
+from menu import UtilItem
 
 def dbPath():
     from os.path import dirname
@@ -110,7 +110,7 @@ class restore(grok.View):
         self.redirect(self.url(self.context))
 
 
-class BackupButton(MenuItem):
+class BackupButton(UtilItem):
     '''  A menu item for making a data backup
     '''
     grok.context(ISiteRoot)
@@ -121,7 +121,7 @@ class BackupButton(MenuItem):
     mclass = 'nav buttons'
 
 
-class RestoreButton(MenuItem):
+class RestoreButton(UtilItem):
     '''  A menu item for restoring from backup
     '''
     grok.context(ISiteRoot)

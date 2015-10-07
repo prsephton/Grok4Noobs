@@ -7,7 +7,7 @@ from zope.pluggableauth.plugins.principalfolder import InternalPrincipal
 from zope.securitypolicy.interfaces import IPrincipalRoleManager
 from interfaces import ISiteRoot
 
-from menu import MenuItem
+from menu import UtilItem
 import permissions as gfn
 import resource as rc
 
@@ -280,7 +280,7 @@ class PrincipalUsers(grok.Adapter):
         return Users(principals)
 
 #_____________________________________________________________________________________
-class BackButtonMenuEntry(MenuItem):
+class BackButtonMenuEntry(UtilItem):
     '''  A menu item for articles with parent articles. IOW NoobsArticle
     '''
     grok.context(Users)
@@ -289,7 +289,7 @@ class BackButtonMenuEntry(MenuItem):
     mclass = 'nav buttons'
 
 #_____________________________________________________________________________________
-class UsersButtonMenuEntry(MenuItem):
+class UsersButtonMenuEntry(UtilItem):
     '''  A menu item for articles with parent articles. IOW NoobsArticle
     '''
     grok.context(ISiteRoot)

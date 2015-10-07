@@ -10,7 +10,7 @@ from interfaces import IArticle, IAttachments, IAttachment
 from resource import textStyle, popups, style
 from layout import Content, ILayout
 from colorise import ISourceHighlight
-from menu import MenuItem
+from menu import UtilItem
 from permissions import Editing
 
 #____________________________________________________________________________________
@@ -45,7 +45,7 @@ class Attachments(grok.Container):
     title = u'Managing Attachments'
 
 #____________________________________________________________________________________
-class BackButton(MenuItem):
+class BackButton(UtilItem):
     grok.context(IAttachments)
     grok.order(0)
     title = u'Back to article'
@@ -55,7 +55,7 @@ class BackButton(MenuItem):
         return self.context.__parent__
 
 #____________________________________________________________________________________
-class ManageAttachments(MenuItem):
+class ManageAttachments(UtilItem):
     grok.context(IArticle)
     grok.require(Editing)
     grok.order(-1)

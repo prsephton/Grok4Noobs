@@ -20,6 +20,10 @@ class MenuItems(grok.ViewletManager):
     grok.context(ILayout)            # This will be a list of <li /> elements
 
 
+class UtilItems(grok.ViewletManager):
+    grok.context(ILayout)            # As with the normal menu items, but utilities
+
+
 class MenuItem(grok.Viewlet):
     ''' A base class for ad-hoc navigation menu items.
     '''
@@ -30,7 +34,6 @@ class MenuItem(grok.Viewlet):
     title = u''
     link  = u''
     mclass = ''
-    dclass = ''
     mtitle = ''
     image = None
     
@@ -55,6 +58,11 @@ class MenuItem(grok.Viewlet):
                      self.href(), img, self.title))
         else:
             return ''
+
+class UtilItem(MenuItem):
+    ''' A utility menu item
+    '''
+    grok.viewletmanager(UtilItems)   # Render into the MenuItems area
 
 
 class ContainerMenu(grok.Viewlet):
