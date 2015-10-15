@@ -1,0 +1,6 @@
+  <a tal:attributes="href view/hRef | string:#" class="navbar-brand">Grok 4 Noobs</a>
+  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+    <span class="icon-bar" />
+    <span class="icon-bar" />
+    <span class="icon-bar" />
+  </button>

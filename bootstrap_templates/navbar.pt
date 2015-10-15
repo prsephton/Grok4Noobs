@@ -1,0 +1,8 @@
+<div class="navbar-header" tal:content="structure context/@@navbar_header" />
+<div class="navbar-collapse collapse" id="navbar-main">
+    <ul class="nav navbar-nav">
+        <tal:loop tal:repeat="item view/navItems">
+            <li tal:replace="structure item" />
+        </tal:loop>
+    </ul>
+</div>

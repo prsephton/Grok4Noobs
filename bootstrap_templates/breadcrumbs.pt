@@ -1,0 +1,11 @@
+<ul class="breadcrumb">
+  <li tal:repeat="crumb view/crumbs">
+      <a tal:condition="not:crumb/isLast"
+         tal:attributes="href crumb/hRef"
+         tal:content="crumb/title">Crumb</a>
+      <div tal:omit-tag="" tal:condition="crumb/isLast">
+          <span class="active" tal:replace="crumb/title">Crumb</span>
+          <span tal:condition="crumb/isLast" class="divider">/</span>
+      </div>
+  </li>
+</ul>

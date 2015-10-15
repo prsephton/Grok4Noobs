@@ -1,0 +1,27 @@
+<li class="dropdown">
+    <a tal:attributes="href view/link"
+       tal:condition="not:context/items"
+       tal:content="context/title" />
+    <a class="dropdown-toggle" data-toggle="dropdown"
+         tal:attributes="id context/id; href string:#"
+         tal:condition="context/items">
+        <span tal:replace="context/title" />
+        <span tal:condition="context/items" class="caret" />
+    </a>
+    <ul class="dropdown-menu"
+      tal:condition="context/items"
+      tal:attributes="aria-labelledby context/id">
+      <li>
+        <a tal:attributes="href view/link">Section</a>
+      </li>
+      <li class="divider" />
+      <tal:loop tal:repeat="item context/items">
+            <li tal:attributes="class item/itemClass | nothing">
+                <a tal:attributes="href python:view.link(item['link'])"
+                   tal:content="item/title">
+                </a>
+            </li>
+      </tal:loop>
+    </ul>
+</li>
+

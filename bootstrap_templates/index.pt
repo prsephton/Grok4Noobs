@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title tal:content="context/title">Site Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" tal:attributes="href static/bootstrap/bootstrap.css" media="screen">
+    <link rel="stylesheet" tal:attributes="href static/bootstrap/custom.css">
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container" tal:content="structure context/@@navbar">Nav Bar</div>
+    </div>
+
+    <h1> </h1>
+
+    <div class="container" tal:content="structure context/@@breadcrumbs">Crumbs</div>
+    <div class="container" tal:content="structure provider:content">Site Content</div>
+
+    <div class="container">
+      <footer tal:content="structure provider:footer">Footer</footer>
+    </div>
+
+    <script tal:attributes="src static/bootstrap/jquery-1.10.2.min.js"> </script>
+    <script tal:attributes="src static/bootstrap/bootstrap.js"> </script>
+    <script tal:attributes="src static/bootstrap/custom.js"> </script>
+
+  </body>
+</html>
