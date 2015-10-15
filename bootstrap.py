@@ -107,6 +107,7 @@ class Index(grok.View):
     '''
     grok.context(IArticle)
     grok.layer(Bootstrap)
+    grok.require('zope.Public')
 
     editing = False   # content viewlet manager needs these flags
     adding = False
