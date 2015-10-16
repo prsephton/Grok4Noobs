@@ -57,7 +57,10 @@ class NavBar_Header(grok.View):
     grok.layer(Bootstrap)
 
     def hRef(self):  # Returns site root URL
-        return self.url(grok.getApplication())
+        if self.context == grok.getApplication():
+            return self.url(grok.getApplication())
+        else:
+            return self.url(self.context.__parent__)
 
 
 class NavBar(grok.View):
