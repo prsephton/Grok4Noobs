@@ -13,10 +13,10 @@
         <div class="container" tal:content="structure context/@@navbar">Nav Bar</div>
     </div>
 
-    <h1> </h1>
-
-    <div class="container" tal:content="structure context/@@breadcrumbs">Crumbs</div>
-    <div class="container" tal:content="structure provider:content">Site Content</div>
+    <div class="container contentwrap">
+        <div tal:content="structure context/@@breadcrumbs">Crumbs</div>
+        <div tal:content="structure provider:content">Site Content</div>
+    </div>
 
     <div class="container">
       <footer tal:content="structure provider:footer">Footer</footer>

@@ -2,7 +2,7 @@ import grok
 
 from interfaces import IArticle, IArticleSorter, Interface
 from urllib import quote_plus
-from resource import textLight
+from resource import textLight, fixheader
 from zope.component.interfaces import Attribute
 
 
@@ -119,4 +119,5 @@ class Index(grok.View):
 
     def update(self): # require 'light' text box styling
         textLight.need()
+        fixheader.need()
 
