@@ -11,7 +11,11 @@ class ISourceHighlight(Interface):
 class ISiteRoot(Interface):
     """ Marks the site root for easy reference
     """
-    pass
+
+#____________________________________________________________________________________
+class IStatus(Interface):
+    """ Status feedback utility
+    """
 
 #____________________________________________________________________________________
 class IAttachments(Interface):

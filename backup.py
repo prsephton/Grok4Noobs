@@ -4,8 +4,9 @@ from grok4noobs import Grok4Noobs, NoobsArticle
 from attachments import Attachments, Source, Image
 from urllib import quote_plus
 from permissions import Administering
-from interfaces import ISiteRoot
+from interfaces import ISiteRoot, IStatus
 from menu import UtilItem
+from zope import component
 
 def dbPath():
     from os.path import dirname
@@ -89,8 +90,15 @@ class backup(grok.View):
     grok.require(Administering)
 
     def update(self):
-        with FileIO(dbPath(), 'w') as f:
-            do_backup(f, self.context)
+        self.context.status = None
+        sts = component.getUtility(IStatus)
+        try:
+            with FileIO(dbPath(), 'w') as f:
+                do_backup(f, self.context)
+            sts('backup_ok', 'Success')
+        except Exception, e:
+            sts('backup_fail', str(e))
+
 
     def render(self):
         self.redirect(self.url(self.context))
@@ -103,8 +111,13 @@ class restore(grok.View):
     grok.require(Administering)
 
     def update(self):
-        with FileIO(dbPath(), 'r') as f:
-            do_restore(f, self.context)
+        sts = component.getUtility(IStatus)
+        try:
+            with FileIO(dbPath(), 'r') as f:
+                do_restore(f, self.context)
+            sts('restore_ok', 'Success')
+        except Exception, e:
+            sts('restore_fail', str(e))
 
     def render(self):
         self.redirect(self.url(self.context))
