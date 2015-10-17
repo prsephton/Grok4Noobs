@@ -1,0 +1,36 @@
+<div tal:define="sts context/status/read | nothing" tal:condition="sts">
+    <div id="status_msg" style="display:none"
+         tal:attributes="title sts/title"
+         tal:define="status sts/status; message sts/message">
+        <div tal:condition="python:status=='backup_ok'">
+            <p>You have successfully backed up the current article database.</p>
+        </div>
+        <div tal:condition="python:status=='backup_fail'">
+            <p>The backup operation was unsuccessful</p>
+            <p>The error was: <span tal:content="message">message</span></p>
+        </div>
+        <div tal:condition="python:status=='restore_ok'">
+            <p>You have successfully restored the current article database.</p>
+        </div>
+        <div tal:condition="python:status=='restore_fail'">
+            <p>The restore operation was unsuccessful</p>
+            <p>The error was: <span tal:content="message">message</span></p>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+      $(function() {
+        $( "#status_msg" ).css('display','block').dialog({
+          buttons: [
+            {
+                text: "Ok",
+                click: function() {
+                  $(this).dialog("close");
+                }
+            }
+          ]
+        });
+      });
+    </script>
+
+</div>

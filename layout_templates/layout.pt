@@ -10,16 +10,26 @@
 		<title tal:content="context/title | context/description | string:Untitled" />
 	</head>
 	<body i18n:domain="camibox">
-		<div class='MastHead rounded-top' tal:content='structure provider:masthead' />
 		<div class='ContentWrapper'>
 		    <div class='ContentArea'>
-                <div class='Navigation' tal:content='structure provider:navigation' />
-                <div class='SideBar' tal:content='structure provider:sidebar' />
+                <div class='Navigation'>
+                    <div tal:content='structure provider:navigation' />
+                </div>
+                <div class='SideBar'>
+                    <div tal:content='structure provider:sidebar' />
+                </div>
                 <div class='ContentBox'>
                     <div class='Content' tal:content='structure provider:content' />
                 </div>
     		</div>
 		</div>
-        <div class='Footer' tal:content='structure provider:footer' />
+        <div class="MastWrap">
+            <div class="slate">
+                <div class='MastHead rounded-top' tal:content='structure provider:masthead'>
+                </div>
+            </div>
+        </div>
+        <div class='Footer' tal:content='structure provider:footer'>
+        </div>
 	</body>
 </html>
