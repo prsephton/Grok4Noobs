@@ -13,20 +13,20 @@ div.MastWrap {
 div.MastWrap > div {
     position: fixed;
     top:5px; left:5px; right:5px;
-	height:8.5em;
+	height:8em;
 }
 
 div.MastHead {
 	background-color:#DADAEA;
 	overflow:hidden;
-	height:8.5em;
+	height:8em;
 }
 
 div.ContentWrapper {
  	background-color:#DADAEA;
     position:absolute;
     display:block;
-	top:8.5em;
+	top:9em;
 	left:5px;
 	right:5px;
 	bottom:1em;
@@ -62,7 +62,7 @@ div.ContentBox {
 	height:100%;
 	margin-left:14em;
 	margin-right:2em;
-	margin-top:20px;
+	padding-top:20px;
 	background-color:#F7F7FF;
     -webkit-border-top-left-radius: 20px;
     -khtml-border-top-left-radius: 20px;
