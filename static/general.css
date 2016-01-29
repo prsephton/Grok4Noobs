@@ -118,6 +118,7 @@ div.vscroll {
     overflow-y:auto;
     margin-left:0.8em;
     margin-right:1em;
+    margin-bottom:0.5em;
     line-height:1.5em;
 }
 
