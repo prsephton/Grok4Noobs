@@ -3,9 +3,14 @@
 </div>
 
 <div class='buttons' tal:condition="viewlet/isEditable | nothing">
-	<a tal:attributes="href python:viewlet.view.url(context,data={'edit':1})">Edit</a>
-	<a tal:attributes="href python:viewlet.view.url(context,data={'add':1})">Add</a>
-	<a tal:attributes="href python:viewlet.view.url(context)">Cancel</a>
+    <div tal:omit-tag="" tal:condition="viewlet/view/viewing">
+        <a tal:attributes="href python:viewlet.view.url(context,data={'edit':1})">Edit</a>
+        <a tal:attributes="href python:viewlet.view.url(context,data={'add':1})">Add</a>
+    </div>
+	<a tal:attributes="href python:viewlet.view.url(context,data={'cancel':1})"
+       tal:condition="not:viewlet/view/viewing">
+        Cancel
+    </a>
 </div>
 
 <ul class='menu'>
