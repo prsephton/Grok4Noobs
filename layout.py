@@ -1,6 +1,8 @@
 import grok
 from resource import style, favicon, tinymce, textdivs
 from interfaces import Interface
+from zope.session.interfaces import ISession
+from urllib import quote_plus
 
 class ILayout(Interface):
     ''' This is an interface for the main site layout
@@ -51,6 +53,7 @@ class FooterViewlet(grok.Viewlet):
     grok.context(ILayout)
     grok.viewletmanager(Footer)
 
+
 # Finally, the page layout itself is a view which renders the html
 # skeleton.  It also includes any resources such as css and javascript
 # which would be required by the content.
@@ -68,13 +71,38 @@ class Layout(grok.View):
     editing = False
     adding = False
     deleting = False
+    moving = False
     viewing = True
 
-    def update(self, edit=None, add=None, delete=None, nomce=None):
+    def process_moving(self, move, moved, cancel):
+        moving = False
+        session = ISession(self.request)['package.gfn']
+        if moved is not None and 'moving' in session:
+            item = session['moving']
+            nTitle = quote_plus(item.navTitle)
+            self.context[nTitle] = item
+            del session['moving']
+        elif move is not None:
+            moving = self.context.navTitle
+            nTitle = quote_plus(moving)
+            cont = self.context.__parent__
+            session['moving'] = self.context
+            del cont[nTitle]
+            self.redirect(self.url(cont))
+        elif 'moving' in session:
+            if cancel is not None:
+                del session['moving']
+            else:
+                moving = self.context.navTitle
+        return moving
+
+    def update(self, edit=None, add=None, delete=None, move=None, moved=None,
+               nomce=None, cancel=None):
         self.editing = edit is not None
         self.adding = add is not None
         self.deleting = delete is not None
-        self.viewing = not (self.editing or self.adding or self.deleting)
+        self.moving = self.process_moving(move, moved, cancel)
+        self.viewing = not (self.editing or self.adding or self.deleting or self.moving)
         style.need()
         favicon.need()
         if nomce is None:  # Switch includes or omits tinyMCE
