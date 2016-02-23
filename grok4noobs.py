@@ -209,11 +209,13 @@ class Deleting(grok.View):
     grok.require(Editing)
 
     def render(self, dtitle=None):
-        if dtitle is not None and dtitle in self.context:
-            try:
-                del self.context[dtitle]
-            except Exception, e:
-                print 'There was an error deleting %s:\n\t%s' % (dtitle, str(e))
-                raise e
+        if dtitle is not None:
+            dtitle = quote_plus(dtitle)
+            if dtitle in self.context:
+                try:
+                    del self.context[dtitle]
+                except Exception, e:
+                    print 'There was an error deleting %s:\n\t%s' % (dtitle, str(e))
+                    raise e
         self.redirect(self.url(self.context))
 
