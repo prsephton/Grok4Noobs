@@ -200,12 +200,20 @@ class Delete(forms.EditForm):
     @grok.action(u'Delete this page (cannot be undone)')
     def delPage(self):
         title = self.context.navTitle
-        try:
-            ntitle = quote_plus(title)
-            parent = self.context.__parent__
-            del self.context.__parent__[ntitle]
-            self.redirect(self.url(parent))
-        except Exception, e:
-            print 'There was an error deleting %s:\n\t%s' % (title, str(e))
-            raise e
+        parent = self.context.__parent__
+        url = self.url(parent, name='deleting', data={'dtitle':title})
+        self.redirect(url)
+
+class Deleting(grok.View):
+    grok.context(IArticle)       # Container for deleted item
+    grok.require(Editing)
+
+    def render(self, dtitle=None):
+        if dtitle is not None and dtitle in self.context:
+            try:
+                del self.context[dtitle]
+            except Exception, e:
+                print 'There was an error deleting %s:\n\t%s' % (dtitle, str(e))
+                raise e
+        self.redirect(self.url(self.context))
 
