@@ -1,5 +1,5 @@
 <div class='buttons' tal:condition="viewlet/view/viewing">
-	<a tal:attributes="href python:viewlet.view.url(context,data={'delete':1})">Delete page</a>
+	<a tal:attributes="href python:viewlet.view.url(context,data={'delete':1})">Del page</a>
 	<a tal:attributes="href python:viewlet.view.url(context, data={'move':1})">Move page</a>
 </div>
 <div class='buttons' tal:condition="viewlet/view/moving">

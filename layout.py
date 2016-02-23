@@ -3,7 +3,6 @@ from resource import style, favicon, tinymce, textdivs
 from interfaces import Interface
 from zope.session.interfaces import ISession
 from urllib import quote_plus
-
 class ILayout(Interface):
     ''' This is an interface for the main site layout
 
