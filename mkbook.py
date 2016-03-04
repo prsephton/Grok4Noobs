@@ -21,6 +21,21 @@ class PageSimpleHTML(grok.View):
     grok.context(IArticle)
     grok.require('zope.Public')
 
+    def articleNumber(self):
+        order = getattr(self.context, "order", None)
+        if order is None:
+            self.context.section = ""
+        else:
+            order = int(order) + 1
+            parent = getattr(self.context, "__parent__", None)
+            if parent and len(parent.section):
+                section = "{}.{}".format(parent.section, order)
+            else:
+                section = "{}".format(order)
+            self.context.section = section
+            return section + ": "
+        return ""
+
     def articleContent(self):
         baseUrl = self.url(self.context) + "/"
         text = self.context.text
