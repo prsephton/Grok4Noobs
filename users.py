@@ -296,6 +296,6 @@ class UsersButtonMenuEntry(UtilItem):
     grok.require(gfn.Administering)
     grok.order(-4)
     title = u'Manage Users'
-    link = b'/users'
+    link = b'users'
     mclass = 'nav buttons'
 
