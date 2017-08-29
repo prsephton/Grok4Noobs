@@ -73,6 +73,11 @@ div.ContentBox {
     border-top-left-radius: 20px;
 }
 
+div.CommentSection {
+	margin: 2em;
+	border: 1px solid gray;
+}
+
 div.SideBar {
     display:block;
 	background-color:#DADAEA;

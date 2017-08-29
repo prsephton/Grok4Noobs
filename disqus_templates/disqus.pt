@@ -1,4 +1,4 @@
-<div class="CommentsSection"
+<div class="CommentsSection rounded-top"
 	tal:attributes="PAGE_URL PAGE_URL; PAGE_IDENTIFIER PAGE_IDENTIFIER">
 	<div id="disqus_thread"></div>
 	<script>
