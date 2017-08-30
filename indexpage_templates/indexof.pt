@@ -1,0 +1,9 @@
+<li class='IndexEntry' style='list-style-type:none'>
+    <span tal:content="view/articleNumber" />
+    <a tal:content="context/title" tal:attributes="href python:view.url(context)" />
+	<ul class="sectionItem" tal:repeat="ctx view/sortedItems">
+	    <div tal:replace="structure ctx/@@indexof">
+	      section text
+	    </div>
+	</ul>
+</li>

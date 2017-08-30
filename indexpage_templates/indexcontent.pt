@@ -1,0 +1,3 @@
+<div class='IndexPage' style='margin:2em'>
+   <ul class="sectionItems" tal:content="structure site/@@indexof"></ul>
+</div>
