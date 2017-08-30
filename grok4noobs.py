@@ -52,7 +52,7 @@ class Grok4Noobs(grok.Application, ArticleContainer):
         sm = self.getSiteManager()
         if 'users' in sm:
             return IUsers(sm['users'])
- 
+
 
 class TextViewlet(grok.Viewlet):
     ''' Render the article content
