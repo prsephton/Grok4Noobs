@@ -18,13 +18,16 @@ class IndexPage(grok.Model):
     text = u''
 
 class PageView(grok.View):
-    grok.context(ISiteRoot)
+    grok.context(IArticle)
     grok.name('indexpage')
     grok.require('zope.Public')
 
     def render(self):
+        ctx = self.context
+        while not ISiteRoot.providedBy(ctx):
+            ctx = ctx.__parent__
         page = IndexPage()
-        page = location.located(page, self.context, 'indexpage')
+        page = location.located(page, ctx, 'indexpage')
         view = component.getMultiAdapter((page, self.request), name='index')
         return view()
 
@@ -78,7 +81,7 @@ class PreviousLevelMenuEntry(UtilItem):
 class IndexButton(UtilItem):
     '''  A menu item to navigate to the index
     '''
-    grok.context(ISiteRoot)
+    grok.context(IArticle)
     grok.require('zope.Public')
     grok.order(-1)
     title = u'Index'
