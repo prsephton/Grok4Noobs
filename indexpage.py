@@ -16,6 +16,11 @@ class IndexPage(grok.Model):
     title = u'Site Index'
     navTitle = u'Index'
     text = u''
+    article = None
+
+    def __init__(self, article):
+        self.article = article
+
 
 class PageView(grok.View):
     grok.context(IArticle)
@@ -26,7 +31,7 @@ class PageView(grok.View):
         ctx = self.context
         while not ISiteRoot.providedBy(ctx):
             ctx = ctx.__parent__
-        page = IndexPage()
+        page = IndexPage(self.context)
         page = location.located(page, ctx, 'indexpage')
         view = component.getMultiAdapter((page, self.request), name='index')
         return view()
@@ -66,16 +71,33 @@ class IndexOf(grok.View):
         sorter = IArticleSorter(self.context)
         return sorter.sortedItems()
 
-class PreviousLevelMenuEntry(UtilItem):
+class IntroductionMenuEntry(UtilItem):
     '''  Make a button to navigate to the introduction
     '''
     grok.context(IndexPage)
-    title = mtitle = u'Up a level'
+    title = mtitle = u'Top Level'
     link = u'..'
     mclass = 'nav buttons'
+    grok.order(1)
     def condition(self):
         self.title = self.context.__parent__.navTitle
         self.image = self.static['up.png']
+        return True
+
+class ArticleMenuEntry(UtilItem):
+    '''  Make a button to navigate to the introduction
+    '''
+    grok.context(IndexPage)
+    title = mtitle = u'Back to Article'
+    link = None
+    mclass = 'nav buttons'
+    grok.order(2)
+    def condition(self):
+        if self.context.article==self.context.__parent__:
+            return False
+        self.title = self.context.article.navTitle
+        self.image = self.static['left.png']
+        self.link = self.context.article
         return True
 
 class IndexButton(UtilItem):
