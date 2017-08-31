@@ -3,7 +3,6 @@
 # BALogout  link to https://log:out@example.com/.
 
 import grok
-from grok4noobs import Grok4Noobs
 from sitelocal import ISiteLocalInstaller
 
 from zope import schema
@@ -207,7 +206,7 @@ class CredentialsPlugin(grok.GlobalUtility, SessionCredentialsPlugin):
 class InstallAuth(grok.View):
     ''' If we call this view, we want to reinstall authentication
     '''
-    grok.context(Grok4Noobs)
+    grok.context(grok.IApplication)
 #    grok.require('zope.Public')
     grok.require(Administering)
 
