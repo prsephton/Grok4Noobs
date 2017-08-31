@@ -299,3 +299,21 @@ class UsersButtonMenuEntry(UtilItem):
     link = b'users'
     mclass = 'nav buttons'
 
+    def condition(self):
+        sm = self.context.getSiteManager()
+        return 'users' in sm
+
+#_____________________________________________________________________________________
+class CreateUsersButtonMenuEntry(UtilItem):
+    '''  A menu item to install authentication database
+    '''
+    grok.context(ISiteRoot)
+    grok.require(gfn.Administering)
+    grok.order(-4)
+    title = u'Initialise UsersDB'
+    link = b'installauth'
+    mclass = 'nav buttons'
+
+    def condition(self):
+        sm = self.context.getSiteManager()
+        return 'users' not in sm
