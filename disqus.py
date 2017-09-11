@@ -12,7 +12,7 @@ class Disqus(grok.Viewlet):
     def namespace(self):
         ns = {}
         url = str(self.view.url())
-        url.replace('gfn.aptrackers.com', 'www.aptrackers.com/gfn')
+        url = url.replace('gfn.aptrackers.com', 'www.aptrackers.com/gfn')
         ns['PAGE_URL'] = url
         ns['PAGE_IDENTIFIER'] = self.context.title
         return ns
