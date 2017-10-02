@@ -4,6 +4,14 @@ body {
 	color: #444;
 }
 
+strong {
+	color:#333;
+}
+
+em {
+	color:#222;
+}
+
 div.MastWrap {
 	background-color:white;
     position: fixed;
