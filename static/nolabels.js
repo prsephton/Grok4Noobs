@@ -19,6 +19,7 @@ $(document).ready(function(){
 				if (labels.length) {
 					var txt = labels.text();
 					fld.attr('placeholder', txt);
+					fld.attr('title', txt);
 					if (required) fld.addClass('required');
 					lb.css("display", "none");
 				}
