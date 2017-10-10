@@ -4,6 +4,7 @@ jQuery.support.placeholder = (function(){
 })();
 
 $(document).ready(function(){
+	$('div.form-status').css('display', 'none');  // Hide all form status sections
 	if ($.support.placeholder) {
 		$('tr.form-widget').each(function(){
 			var lb = $('td.label', this);
