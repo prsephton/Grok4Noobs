@@ -1,5 +1,5 @@
 import grok
-from resource import style, favicon, tinymce, textdivs
+from resource import style, favicon, tinymce, textdivs, nolabels
 from interfaces import Interface
 from zope.session.interfaces import ISession
 from urllib import quote_plus
@@ -104,6 +104,7 @@ class Layout(grok.View):
         self.viewing = not (self.editing or self.adding or self.deleting or self.moving)
         style.need()
         favicon.need()
+        nolabels.need()
         if nomce is None:  # Switch includes or omits tinyMCE
             tinymce.need()
         textdivs.need()
