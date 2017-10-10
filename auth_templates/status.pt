@@ -1,7 +1,10 @@
-<div>
-    <div tal:condition="viewlet/loggedIn">
+<div style='position:relative; display:inline-block'>
+    <div style='position:fixed; right: 2em'
+    	tal:condition="viewlet/loggedIn">
         <p tal:content="viewlet/greeting" />
         <a tal:attributes="href viewlet/logoutLink"><button>Logout</button></a>
     </div>
-    <div tal:condition="not:viewlet/loggedIn" tal:content="structure context/@@login" />
+    <div style='position:fixed; right: 2em'
+    	tal:condition="not:viewlet/loggedIn"
+    	tal:content="structure context/@@login" />
 </div>
