@@ -1,4 +1,4 @@
-<div style='position:relative; display:inline-block'>
+<div style='position:relative'>
     <div style='position:fixed; right: 2em'
     	tal:condition="viewlet/loggedIn">
         <p tal:content="viewlet/greeting" />
