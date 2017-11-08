@@ -29,7 +29,7 @@
 
   <div class="form-fields">
   	<table>
-      <tal:block repeat="widget view/widgets">
+      <tal:block tal:repeat="widget view/widgets">
         <tr class="form-widget">
           <td class="label" tal:define="hint widget/hint">
             <label tal:condition="python:hint"

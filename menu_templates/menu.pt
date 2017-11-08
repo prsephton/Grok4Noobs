@@ -14,10 +14,10 @@
 </div>
 
 <ul class='menu'>
-	<div tal:replace='structure provider:menuitems' />
+	<li tal:replace='structure provider:menuitems' />
 </ul>
 
 <ul class='menu'>
-	<div tal:replace='structure provider:utilitems' />
+	<li tal:replace='structure provider:utilitems' />
 </ul>
 
