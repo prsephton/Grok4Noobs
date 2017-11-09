@@ -37,8 +37,8 @@ $(document).ready(function(){
             siblings.removeClass('aboveMe').removeClass('belowMe');
         }
 
+        var toMove = $(this);
         if ($(this).hasClass('movable')) {
-            var toMove = $(this);
             var idx = toMove.index();
 
             siblings.removeClass('movable');
@@ -51,7 +51,7 @@ $(document).ready(function(){
                 siblings.slice(idx+1).addClass('belowMe');
             }
         } else {
-            var toMove = $('li.moving', parent);
+            toMove = $('li.moving', parent);
             if ($(this).hasClass('aboveMe')) {
                 toMove.remove();
                 $(this).before(toMove);
