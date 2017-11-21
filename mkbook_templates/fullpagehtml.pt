@@ -16,7 +16,7 @@
 	</head>
 	<body i18n:domain="camibox" class="plainText" >
 		<h1 class='bookTitle'>Grok 4 Noobs.</h1>
-		
-		<div class="sectionItems" tal:content="structure context/@@pagesimplehtml"></div>
+
+		<div class="sectionItems" id="sn_main" tal:content="structure context/@@pagesimplehtml"></div>
 	</body>
 </html>
