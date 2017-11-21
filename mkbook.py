@@ -36,11 +36,12 @@ class PageSimpleHTML(grok.View):
             return section + ": "
         return ""
 
-    def articleId(self):
+    def articleId(self, item):
         if self.context.section:
-            aid = u'sn_'+self.context.section.replace('.', '_')
-            return aid
-        return ""
+            section = "{}.{}".format(self.context.section, item.order)
+        else:
+            section = "{}".format(item.order)
+        return u'sn_'+section.replace('.', '_')
 
     def articleContent(self):
         baseUrl = self.url(self.context) + "/"

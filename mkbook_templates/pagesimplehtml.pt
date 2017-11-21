@@ -3,8 +3,10 @@
     <span tal:replace="context/title" />
 </h2>
 <div class='Content' tal:replace='structure view/articleContent' />
-<div class="sectionItem" tal:attributes="id view/articleId" tal:repeat="ctx view/sortedItems">
-    <div tal:replace="structure ctx/@@pagesimplehtml">
-      section text
-    </div>
-</div>
+<tal:loop tal:repeat="ctx view/sortedItems">
+	<div class="sectionItem" tal:attributes="id python:view.articleId(ctx)">
+	    <div tal:replace="structure ctx/@@pagesimplehtml">
+	      section text
+	    </div>
+	</div>
+</tal:loop>
