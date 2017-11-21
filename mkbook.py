@@ -38,9 +38,9 @@ class PageSimpleHTML(grok.View):
 
     def articleId(self, item):
         if self.context.section:
-            section = "{}.{}".format(self.context.section, item.order)
+            section = "{}.{}".format(self.context.section, item.order+1)
         else:
-            section = "{}".format(item.order)
+            section = "{}".format(item.order+1)
         return u'sn_'+section.replace('.', '_')
 
     def articleContent(self):
