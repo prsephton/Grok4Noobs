@@ -67,6 +67,22 @@ class FullPageHTML(grok.View):
         style.need()
         textLight.need()
 
+
+class IdView(grok.View):
+    '''  Give all articles an ID
+    '''
+    grok.context(IArticle)
+    grok.require('zope.Public')
+    grok.name("id")
+
+    def render(self):
+        section = getattr(self.context, "section", None)
+        if section is None:
+            return "sn_main"
+        else:
+            return u'sn_'+section.replace('.', '_')
+
+
 class MkBook(grok.View):
     '''  Turn the content of this site into a book
     '''
