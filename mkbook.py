@@ -36,18 +36,24 @@ class PageSimpleHTML(grok.View):
             return section + ": "
         return ""
 
+    def articleId(self):
+        if self.context.section:
+            aid = u'sn_'+self.context.section.replace('.', '_')
+            return aid
+        return ""
+
     def articleContent(self):
         baseUrl = self.url(self.context) + "/"
         text = self.context.text
-        if self.context.attachments is not None: 
+        if self.context.attachments is not None:
             for a in self.context.attachments:
                 st = 'attachments/{}'.format(a)
                 text = text.replace(st, baseUrl+st)
         return text
-    
+
     def sortedItems(self):
         sorter = IArticleSorter(self.context)
-        return sorter.sortedItems()        
+        return sorter.sortedItems()
 
 
 class FullPageHTML(grok.View):
@@ -65,7 +71,7 @@ class MkBook(grok.View):
     '''
     grok.context(ISiteRoot)
     grok.require('zope.Public')
-    
+
     def render(self):
         url = self.url(self.context, name='fullpagehtml')
 
@@ -73,7 +79,7 @@ class MkBook(grok.View):
             result = subprocess.check_output(['prince', url, '-o', '-'])
         except:
             return
-        
+
         response = self.request.response
         response.setHeader('content-type', 'application/pdf')
         response.addHeader('content-disposition', 'inline;filename="gfn.pdf"')
