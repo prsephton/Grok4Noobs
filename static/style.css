@@ -73,9 +73,15 @@ table.attachmentsTable td.buttons {
 }
 
 .fn {
-    float: footnote
+    float: footnote;
 }
 
 @page {
-    counter-reset: footnote
+    counter-reset: footnote;
+    @footnotes {
+        border-top: solid black thin;
+        padding-top: 8pt;
+        font-size: 8pt;
+    }
 }
+
