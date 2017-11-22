@@ -1,7 +1,7 @@
 #______________________________________________________________________________
 # Turn our site into a pdf printable document using princexml
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-import grok
+import grok, re
 
 from interfaces import ISiteRoot, IArticle, IArticleSorter
 from menu import UtilItem
@@ -44,8 +44,34 @@ class PageSimpleHTML(grok.View):
         return u'sn_'+section.replace('.', '_')
 
     def articleContent(self):
+
+        def host_from(url):
+            parts = re.search(r'(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)', url)
+            if parts is not None:
+                return parts.group(2)
+
         baseUrl = self.url(self.context) + "/"
+        host = host_from(baseUrl)
+
         text = self.context.text
+        c = re.compile(r'<a .*href *= *"(.*)".*>(.*)</a>')
+        # Python regex replace local links inline, generate footnotes etc.
+        pos = 0
+        new_text = ""
+        while True:
+            s = c.search(text, pos)
+            if s is None:
+                new_text += text[pos:]
+                break
+            else:
+                new_text += text[pos:s.start()]  # Add text up to start
+                if host == host_from(s.group(1)):  # local link. replace with section anchor
+                    new_text += s.group()
+                else:                       # Replace global links with footnotes
+                    new_text += "<em>{}</em><span class='fn'>{}</span>".format(s.group(2), s.group(1))
+            pos = s.end()
+        text = new_text
+
         if self.context.attachments is not None:
             for a in self.context.attachments:
                 st = 'attachments/{}'.format(a)

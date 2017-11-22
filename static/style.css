@@ -72,3 +72,10 @@ table.attachmentsTable td.buttons {
     border-top-right-radius: 20px;
 }
 
+.fn {
+    float: footnote
+}
+
+@page {
+    counter-reset: footnote
+}
