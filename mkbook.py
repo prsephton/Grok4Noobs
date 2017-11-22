@@ -61,17 +61,18 @@ class PageSimpleHTML(grok.View):
         while True:
             s = c.search(text, pos=epos)
             if s is None:
-                new_text += text[epos:]
+                new_text = new_text + text[epos:]
                 break
             else:
-                new_text += text[epos:s.start()]  # Add text up to start
+                new_text = new_text + text[epos:s.start()]  # Add text up to start
                 epos = s.end()
                 if host == host_from(s.group(2)):  # local link. replace with section anchor
-                    new_text += s.group()
+                    new_text = new_text + s.group()
                 else:                       # Replace global links with footnotes
-                    new_text += "<em>{}</em><span class='fn'>{}: {}</span>".format(s.group(3),
-                                                                                   s.group(1),
-                                                                                   s.group(2))
+                    fmt = "<em>{}</em><span class='fn'>{}: {}</span>"
+                    new_text = new_text + fmt.format(s.group(3),
+                                                     s.group(1),
+                                                     s.group(2))
         text = new_text
 
         if self.context.attachments is not None:
