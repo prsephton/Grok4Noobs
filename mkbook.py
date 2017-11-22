@@ -54,7 +54,7 @@ class PageSimpleHTML(grok.View):
         host = host_from(baseUrl)
 
         text = self.context.text
-        c = re.compile(r'<a .*href *= *"(.*)".*>(.*)</a>')
+        c = re.compile(r'<a .*title="(.*)" *href="(.*)".*>(.*)</a>')
         # Python regex replace local links inline, generate footnotes etc.
         pos = 0
         new_text = ""
@@ -65,11 +65,13 @@ class PageSimpleHTML(grok.View):
                 break
             else:
                 new_text += text[pos:s.start()]  # Add text up to start
-                if host == host_from(s.group(1)):  # local link. replace with section anchor
+                pos = s.end()
+                if host == host_from(s.group(2)):  # local link. replace with section anchor
                     new_text += s.group()
                 else:                       # Replace global links with footnotes
-                    new_text += "<em>{}</em><span class='fn'>{}</span>".format(s.group(2), s.group(1))
-            pos = s.end()
+                    new_text += "<em>{}</em><span class='fn'>{}: {}</span>".format(s.group(3),
+                                                                                   s.group(1),
+                                                                                   s.group(2))
         text = new_text
 
         if self.context.attachments is not None:
