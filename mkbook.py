@@ -68,8 +68,20 @@ class PageSimpleHTML(grok.View):
                 new_text += text[pos:s.start()]  # Add text up to start
                 pos = s.end()+1
                 url = urlparse(s.group(2))
-                if host == host_from(url.netloc):  # local link. replace with section anchor
-                    ob = traverse(grok.getSite(), url.path)
+                if url.netloc is None or host == host_from(url.netloc):  # local link. replace with section anchor
+                    if url.netloc is None:
+                        try:
+                            ob = traverse(self.context, url.path)
+                        except:
+                            try:
+                                ob = traverse(self.context, baseUrl+url.path)
+                            except:
+                                ob = None
+                    else:
+                        try:
+                            ob = traverse(grok.getSite(), url.path)
+                        except:
+                            ob = None
                     if ob is None or not IArticle.providedBy(ob):
                         new_text += s.group()
                     else:
