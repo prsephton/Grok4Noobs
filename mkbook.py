@@ -72,10 +72,10 @@ class PageSimpleHTML(grok.View):
                     host == host_from(url.netloc)):  # local link. replace with section anchor
                     if url.netloc is None:
                         try:
-                            ob = traverse(self.context, url.path)
+                            ob = traverse(self.context, url.path)  # is it relative to current?
                         except:
-                            try:
-                                ob = traverse(self.context, baseUrl+url.path)
+                            try:  # Try relative to site
+                                ob = traverse(grok.getSite(), "/"+url.path)
                             except:
                                 ob = None
                     else:
@@ -91,7 +91,7 @@ class PageSimpleHTML(grok.View):
                                                ob.getArticleId(),
                                                s.group(3))
                 else:                       # Replace global links with footnotes
-                    fmt = u"<em>{}</em><span class='fn'>{}: {}</span>"
+                    fmt = u"<em>{}</em> <span class='fn'>{}: {}</span>"
                     new_text += fmt.format(s.group(3), s.group(1), s.group(2))
         text = new_text
 
