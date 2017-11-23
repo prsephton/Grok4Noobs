@@ -55,7 +55,7 @@ class PageSimpleHTML(grok.View):
         host = host_from(urlparse(baseUrl).netloc)
 
         text = self.context.text
-        c = re.compile(r'<a\s*title="([^"]*)"\s*href="([^"]*)">([^<]*)</a>')
+        c = re.compile(r'<a\s*title="([^"]*)"\s*href="([^"]*)">([^<])</a>')
 
         pos = 0
         new_text = u""
