@@ -6,6 +6,8 @@ import grok, re
 from interfaces import ISiteRoot, IArticle, IArticleSorter
 from menu import UtilItem
 from resource import style, textLight
+from zope.traversing.api import traverse
+from urlparse import urlparse
 import subprocess
 
 try:  # Figure if we have prince (http://www.princexml.com) installed
@@ -45,21 +47,19 @@ class PageSimpleHTML(grok.View):
 
     def articleContent(self):
 
-        def host_from(url):
-            parts = re.search(r'(.*:)//([A-Za-z0-9\-\.]+)(:[0-9]+)?(.*)', url)
-            if parts is not None:
-                return parts.group(2)
+        def host_from(netloc):
+            if type(netloc) is str and len(netloc):
+                return netloc.split(":")[0]
 
         baseUrl = self.url(self.context) + "/"
-        host = host_from(baseUrl)
+        host = host_from(urlparse(baseUrl).netloc)
 
         text = self.context.text
         c = re.compile(r'<a\s*title="([^"]*)"\s*href="([^"]*)">([^<]*)</a>')
 
-        # Python regex replace local links inline, generate footnotes etc.
         pos = 0
         new_text = u""
-        while True:
+        while True:               # Replace URLs inline
             s = c.search(text, pos=pos)
             if s is None:
                 new_text += text[pos:]
@@ -67,8 +67,16 @@ class PageSimpleHTML(grok.View):
             else:
                 new_text += text[pos:s.start()]  # Add text up to start
                 pos = s.end()+1
-                if host == host_from(s.group(2)):  # local link. replace with section anchor
-                    new_text += s.group()
+                url = urlparse(s.group(2))
+                if host == host_from(url.netloc):  # local link. replace with section anchor
+                    ob = traverse(grok.getSite(), url.path)
+                    if ob is None or not IArticle.providedBy(ob):
+                        new_text += s.group()
+                    else:
+                        fmt = '<a title="{}" href="#{}">{}</a>'
+                        new_text += fmt.format(s.group(1),
+                                               ob.getArticleId(),
+                                               s.group(3))
                 else:                       # Replace global links with footnotes
                     fmt = u"<em>{}</em><span class='fn'>{}: {}</span>"
                     new_text += fmt.format(s.group(3), s.group(1), s.group(2))
@@ -104,11 +112,7 @@ class IdView(grok.View):
     grok.name("id")
 
     def render(self):
-        section = getattr(self.context, "section", None)
-        if section is None:
-            return "sn_main"
-        else:
-            return u'sn_'+section.replace('.', '_')
+        return self.context.getArticleId()
 
 
 class MkBook(grok.View):

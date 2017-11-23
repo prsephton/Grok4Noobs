@@ -22,6 +22,13 @@ class ArticleContainer(grok.Container):
     grok.traversable('attachments')
     grok.traversable('sorter')
 
+    def getArticleId(self):  # Only used in producing a book
+        section = getattr(self, "section", None)
+        if section is None:
+            return "sn_main"
+        else:
+            return u'sn_'+section.replace('.', '_')
+
     def sorter(self):
         '''  Find an adapter which adapts self to an IArticleSorter, and return an instance
         '''
