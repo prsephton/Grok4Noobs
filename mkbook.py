@@ -66,7 +66,7 @@ class PageSimpleHTML(grok.View):
                 break
             else:
                 new_text += text[pos:s.start()]  # Add text up to start
-                pos = s.end()+1
+                pos = s.end()
                 url = urlparse(s.group(2))
                 if (url.netloc is None or len(url.netloc)==0 or
                     host == host_from(url.netloc)):  # local link. replace with section anchor
