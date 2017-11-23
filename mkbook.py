@@ -71,15 +71,15 @@ class PageSimpleHTML(grok.View):
                 if (url.netloc is None or len(url.netloc)==0 or
                     host == host_from(url.netloc)):  # local link. replace with section anchor
                     if url.netloc is None:
-                        try:
-                            ob = traverse(self.context, url.path)  # is it relative to current?
+                        try: # Try relative to site
+                            ob = traverse(grok.getSite(), "/"+url.path)
                         except:
-                            try:  # Try relative to site
-                                ob = traverse(grok.getSite(), "/"+url.path)
+                            try:  # is it relative to current?
+                                ob = traverse(self.context, url.path)
                             except:
                                 ob = None
                     else:
-                        try:
+                        try:  # Path is relative to site
                             ob = traverse(grok.getSite(), url.path)
                         except:
                             ob = None
