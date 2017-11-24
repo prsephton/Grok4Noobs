@@ -2,6 +2,8 @@
     <span tal:content="view/articleNumber" />
     <span tal:replace="context/title" />
 </h2>
+<ul class="sectionItems tableofcontent" tal:condition="not:python:getattr(context, 'section', False)"
+	tal:content="structure context/@@indexof"></ul>
 <div class='Content' tal:replace='structure view/articleContent' />
 <tal:loop tal:repeat="ctx view/sortedItems">
 	<div class="sectionItem" tal:attributes="id python:view.articleId(ctx)">

@@ -1,9 +1,18 @@
-<li class='IndexEntry' style='list-style-type:none'>
-    <span tal:content="view/articleNumber" />
-    <a tal:content="context/title" tal:attributes="href python:view.url(context)" />
-	<ul class="sectionItem" tal:repeat="ctx view/sortedItems">
-	    <li tal:replace="structure ctx/@@indexof">
-	      section text
-	    </li>
-	</ul>
+<li class='IndexEntry' style='width:100%; list-style-type:none'>
+	<h1 tal:condition="not:python:getattr(context, 'section')">
+		Table of Contents:
+	</h1>
+	<div tal:condition="python:getattr(context, 'section')">
+	    <span tal:content="view/articleNumber" />
+	    <a class="pn" tal:condition="context/section" tal:content="context/title"
+	    	tal:attributes="href view/articleId" />
+	</div>
+	<div class="clear"></div>
+    <div style="width:100%">
+		<ul class="sectionItem" tal:repeat="ctx view/sortedItems">
+		    <li tal:replace="structure ctx/@@indexof">
+		      section text
+		    </li>
+		</ul>
+    </div>
 </li>

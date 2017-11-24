@@ -67,6 +67,16 @@ class IndexOf(grok.View):
             return section + ": "
         return ""
 
+    def articleId(self):
+        if str(self.request.URL).find('fullpage') >= 0:
+            section = getattr(self.context, 'section', False)
+            if section:
+                return u'#sn_'+section.replace('.', '_')
+            else:
+                return u'#sn_main'
+        else:
+            return self.url(self.context)
+
     def sortedItems(self):
         sorter = IArticleSorter(self.context)
         return sorter.sortedItems()

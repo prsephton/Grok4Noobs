@@ -83,6 +83,22 @@ table.attachmentsTable td.buttons {
     vertical-align: super;
 }
 
+a.pn[href]::after {
+    content:  "  ... [" target-counter(attr(href), page) "]"
+}
+
+.tableofcontent {
+	page-break-before: always;
+	page-break-after: always;
+	font-size: 80%;
+	line-height: 1.3em;
+}
+
+.tableofcontent a {
+	color: black;
+	text-decoration: none;
+}
+
 @page {
     counter-reset: footnote;
     @footnotes {
