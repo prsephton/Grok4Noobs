@@ -1,8 +1,8 @@
 <li class='IndexEntry' style='width:100%; list-style-type:none'>
-	<h1 tal:condition="not:python:getattr(context, 'section')">
+	<h1 tal:condition="not:python:getattr(context, 'section', False)">
 		Table of Contents:
 	</h1>
-	<div tal:condition="python:getattr(context, 'section')">
+	<div tal:condition="python:getattr(context, 'section', False)">
 	    <span tal:content="view/articleNumber" />
 	    <a class="pn" tal:condition="context/section" tal:content="context/title"
 	    	tal:attributes="href view/articleId" />
