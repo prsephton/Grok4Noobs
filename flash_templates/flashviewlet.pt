@@ -1,0 +1,7 @@
+<div class="notification" tal:condition="viewlet/messages">
+	<dl>
+		<dd tal:repeat="message viewlet/messages"
+			tal:attributes="class python:message.type or 'info'"
+			tal:content="message/message">message</dd>
+	</dl>
+</div>

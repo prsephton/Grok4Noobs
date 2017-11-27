@@ -11,6 +11,7 @@
 		<title tal:content="context/title | context/description | string:Untitled" />
 	</head>
 	<body i18n:domain="camibox">
+     	<div tal:replace='structure provider:flashmgr'></div>
 		<div class='ContentWrapper'>
 		    <div class='ContentArea'>
                 <div class='Navigation'>
@@ -30,7 +31,6 @@
                 </div>
             </div>
         </div>
-        <div class='Footer' tal:content='structure provider:footer'>
-        </div>
+        <div class='Footer' tal:content='structure provider:footer'></div>
 	</body>
 </html>

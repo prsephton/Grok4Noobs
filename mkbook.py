@@ -68,11 +68,11 @@ class PageSimpleHTML(grok.View):
                 new_text += text[pos:s.start()]  # Add text up to start
                 pos = s.end()
                 url = urlparse(s.group(2))
-                if (url.netloc is None or len(url.netloc)==0 or
-                    host == host_from(url.netloc)):  # local link. replace with section anchor
-                    if url.netloc is None:
+                if (len(url.netloc)==0 or host == host_from(url.netloc)):
+                    # local link. replace with section anchor
+                    if len(url.netloc)==0:
                         try: # Try relative to site
-                            ob = traverse(grok.getSite(), "/"+url.path)
+                            ob = traverse(grok.getSite(), url.path)
                         except:
                             try:  # is it relative to current?
                                 ob = traverse(self.context, url.path)
@@ -83,7 +83,11 @@ class PageSimpleHTML(grok.View):
                             ob = traverse(grok.getSite(), url.path)
                         except:
                             ob = None
+
                     if ob is None or not IArticle.providedBy(ob):
+                        self.flash('Path not found!')
+                        self.flash('  - current page is: {}'.format(str(self.url(self.context))))
+                        self.flash('  - netloc={}; path={}'.format(url.netloc, url.path))
                         new_text += s.group()
                     else:
                         fmt = '<a title="{}" href="#{}">{}</a>'
