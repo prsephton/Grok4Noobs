@@ -119,6 +119,7 @@ div.MenuHeader {
 	overflow:hidden;
 	text-align:center;
 	margin:auto;
+	margin-top:15px;
 }
 
 form.edit-form {
