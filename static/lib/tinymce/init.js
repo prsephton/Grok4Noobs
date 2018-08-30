@@ -1,5 +1,6 @@
 tinymce.init({
     selector: "textarea",
+    convert_urls: false,
     content_css: "/fanstatic/mygrok.grok4noobs/mceStyle.css",
     plugins: ["code", "lists", "charmap", "paste", "gfncode", "textcolor", "link", "visualblocks", "table"],
     toolbar: 'undo redo | gfncode | link | styleselect | bold italic underline | ' +
