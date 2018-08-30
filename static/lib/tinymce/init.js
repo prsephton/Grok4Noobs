@@ -1,7 +1,7 @@
 tinymce.init({
     selector: "textarea",
     convert_urls: false,
-    content_css: "/fanstatic/mygrok.grok4noobs/mceStyle.css",
+    content_css: "/gfn/fanstatic/gfn.Grok4Noobs/mceStyle.css",
     plugins: ["code", "lists", "charmap", "paste", "gfncode", "textcolor", "link", "visualblocks", "table"],
     toolbar: 'undo redo | gfncode | link | styleselect | bold italic underline | ' +
     		 'alignleft aligncenter alignright alignjustify | ' +
