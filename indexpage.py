@@ -59,7 +59,7 @@ class IndexOf(grok.View):
         else:
             order = int(order) + 1
             parent = getattr(self.context, "__parent__", None)
-            if parent and len(parent.section):
+            if parent and hasattr(parent, 'section') and len(parent.section):
                 section = "{}.{}".format(parent.section, order)
             else:
                 section = "{}".format(order)
