@@ -52,6 +52,10 @@ class IndexOf(grok.View):
     grok.context(IArticle)
     grok.require('zope.Public')
 
+    def update(self):
+        if not hasattr(self.context, 'section'):
+            self.articleNumber()
+
     def articleNumber(self):
         order = getattr(self.context, "order", None)
         if order is None:
