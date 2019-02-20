@@ -1,6 +1,9 @@
 This project is a wiki which documents itself.  The idea is to have
 a working grok project which explains how it is implemented.
 
+There is a working server at https://www.aptrackers.com/gfn with the latest copy
+of the document.
+
 Installation (linux):
     assuming you are in your home directory
     sudo pip install grokproject
